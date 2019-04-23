@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>将页面平均分成四部分</title>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://cdn.bootcss.com/vue/2.5.18-beta.0/vue.js"></script>
+		<style type="text/css">
+			div{
+				object-fit: initial;
+			}
+			
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			.main {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+			}
+			
+			.main2 {
+				width: 100%;
+				height: 95%;
+				position: absolute;
+			}
+
+			.quarter-div9 {
+				width: 33.33%;
+				height: 33.33%;
+				float: left;
+			}
+			
+			
+			.quarter-div4 {
+				width: 50%;
+				height: 50%;
+				float: left;
+			}
+			
+			.quarter-div {
+				width: 100%;
+				height: 100%;
+			}
+
+			.blue {
+				background-color: #5BC0DE;
+			}
+
+			.green {
+				background-color: #5CB85C;
+			}
+
+			.orange {
+				background-color: #F0AD4E;
+			}
+
+			.yellow {
+				background-color: #FFC706;
+			}
+			
+			.red {
+				background-color: #FF0000;
+			}
+		</style>
+	</head>
+	<body >
+		<div id="app">
+		<input type="radio" value=1 v-model="isActive"/>
+		<input type="radio" value=4 v-model="isActive"/>
+		<input type="radio" value=9 v-model="isActive"/>
+		<h1>{{isActive}}</h1>
+		<div class="main2" >
+			
+				<div v-bind:class="[isActive == 1 ? 'quarter-div': '',isActive == 4 ? 'quarter-div4': '',isActive == 9 ? 'quarter-div9': '', 'yellow']">
+					<h1>1</h1>
+				</div>
+				<div v-show="isActive != 1" v-bind:class="[isActive == 4 ? 'quarter-div4': '',isActive == 9 ? 'quarter-div9': '', 'red']">
+					<h1>2</h1>
+				</div>
+				<div v-show="isActive != 1" v-bind:class="[isActive == 4 ? 'quarter-div4': '',isActive == 9 ? 'quarter-div9': '', 'blue']">
+					<h1>3</h1>
+				</div>
+				<div v-show="isActive != 1" v-bind:class="[isActive == 4 ? 'quarter-div4': '',isActive == 9 ? 'quarter-div9': '', 'green']">
+					<h1>4</h1>
+				</div>
+				<div v-show="isActive == 9" v-bind:class="[isActive == 9 ? 'quarter-div9': '', 'blue']">
+					<h1>5</h1>
+				</div>
+				<div v-show="isActive == 9" v-bind:class="[isActive == 9 ? 'quarter-div9': '', 'orange']">
+					<h1>6</h1>
+				</div>
+				<div v-show="isActive == 9" v-bind:class="[isActive == 9 ? 'quarter-div9': '', 'yellow']">
+					<h1>7</h1>
+				</div>
+				<div v-show="isActive == 9" v-bind:class="[isActive == 9 ? 'quarter-div9': '', 'green']">
+					<h1>8</h1>
+				</div>
+				<div v-show="isActive == 9" v-bind:class="[isActive == 9 ? 'quarter-div9': '', 'yellow']">
+					<h1>9</h1>
+				</div>
+				
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		new Vue({
+				el: '#app',
+				data: {isActive : 1}
+		})
+	</script>
+</html>
+
