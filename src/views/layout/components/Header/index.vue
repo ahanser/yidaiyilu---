@@ -8,6 +8,9 @@
             <h5>A project management platform for seismis moonitoring network</h5>
           </div>
         </el-col>
+        <el-col :span="8" id="navList">
+          <span v-for="(item,index)   in  nav" :key="index" @click="goNav(item)">{{item.name}}</span>
+        </el-col>
         <el-col :span="4">
           <img
             src="@/assets/images/info.png"
@@ -55,6 +58,9 @@ export default {
         origin = '法人单位领导 '
       }
       return origin
+    },
+    nav() {
+      return this.$store.state.user.menuArr
     }
   },
   methods: {
@@ -66,12 +72,28 @@ export default {
     showInfor() {
       // console.log( this.$store.state.app )
       this.$store.state.app.tips = true
+    },
+    goNav(item) {
+      this.$store.state.user.sibarArr = item.child
+      this.$router.push(item.path)
     }
   }
 }
 </script>
 <style rel="stylesheet/scss" lang="scss">
 .wrapper {
+  #navList {
+    span {
+      color: #fff;
+      display: inline-block;
+      height: 78px;
+      line-height: 78px;
+      margin: 0 10px;
+    }
+    span:hover {
+      cursor: pointer;
+    }
+  }
   .v-modal {
     //display: none;
     background: transparent !important;

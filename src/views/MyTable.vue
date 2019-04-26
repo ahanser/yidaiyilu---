@@ -1,3 +1,4 @@
+
 <template>
   <div class="my-table">
     <el-table :data="data" @cell-click="tableDbEdit">

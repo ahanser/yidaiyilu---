@@ -18,20 +18,19 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
-import NavBarItem from "./SidebarItem";
+import { mapState } from 'vuex'
+import obj from '@/views/data/mock.js'
+import NavBarItem from './SidebarItem'
 
 export default {
   data() {
     return {
       navBgShow: false,
-      active: "/business",
-    
-    };
+      active: '/business'
+    }
   },
 
-  props: ["layout"],
+  props: ['layout'],
   computed: {
     defActive() {
       // if (this.active == "") {
@@ -39,97 +38,49 @@ export default {
       //   alert(this.active);
       //   return this.active;
       // } else {
-      return this.$route.path;
+      return this.$route.path
       // }
     },
     navList() {
-      let arr = [];
-      let user = JSON.parse(window.sessionStorage.getItem("userInfor"))
-        .username;
-      if (user == "李欣") {
-         setTimeout(() => {
-            console.log(11)
-         }, 1000);
+      let arr = this.$store.state.user.sibarArr
+      let user = JSON.parse(window.sessionStorage.getItem('userInfor')).username
+      if (user == '李欣') {
+        // arr = obj
+        this.$store.state.user.menuArr = obj
+      }
+
+      if (user == '王安') {
         arr = [
           {
-            path: "/ss",
+            path: '/ss',
 
-            name: "数据管理系统",
-            icon: "el-icon-tickets",
+            name: '业务管理系统',
+            icon: 'el-icon-document',
             child: [
               {
-                path: "/dashboard",
-                name: "建设任务"
+                path: '/business',
+                name: '业务管理'
               },
               {
-                path: "/process",
-                name: "建设过程"
+                path: '/Financial',
+                name: '财务明细统计'
               },
               {
-                path: "/role",
-                name: "参与角色"
-              },
-              {
-                path: "/units",
-                name: "参与单位"
-              },
-              {
-                path: "/participants",
-                name: "参与人员"
-              },
-              {
-                path: "/construction",
-                name: "建设项目"
-              },
-              {
-                path: "/knowledge",
-                name: "知识库管理"
-              },
-              {
-                path: "/contract",
-                name: "合同管理"
+                path: '/progress',
+                name: '分项目进度统计'
               }
             ]
           }
-        ];
+        ]
       }
 
-      if (user == "王安") {
-           setTimeout(() => {
-            console.log(22)
-         }, 1000);
-       
-        arr = [
-          {
-            path: "/ss",
-
-            name: "业务管理系统",
-            icon: "el-icon-document",
-            child: [
-              {
-                path: "/business",
-                name: "业务管理"
-              },
-              {
-                path: "/Financial",
-                name: "财务明细统计"
-              },
-              {
-                path: "/progress",
-                name: "分项目进度统计"
-              }
-            ]
-          }
-        ];
-      }
-
-      if (arr[0].child) {
-        this.$router.push({ path: arr[0].child[0].path });
-      } else {
-        this.$router.push({ path: arr[0].path });
-      }
+      // if (arr[0].child) {
+      //   this.$router.push({ path: arr[0].child[0].path })
+      // } else {
+      //   this.$router.push({ path: arr[0].path })
+      // }
       // this.defActive = "/business";
-      return arr;
+      return arr
     }
   },
 
@@ -146,51 +97,51 @@ export default {
                          * 关闭位于当前打开菜单中该索引值之后的全部菜单
     
                          */
-      let openedMenus = this.$refs.navbar.openedMenus;
-      let openMenuList;
+      let openedMenus = this.$refs.navbar.openedMenus
+      let openMenuList
       // 如果点击的是二级菜单，则获取其后已经打开的菜单
       if (indexPath.length > 1) {
-        let parentPath = indexPath[indexPath.length - 2];
-        openMenuList = openedMenus.slice(openedMenus.indexOf(parentPath) + 1);
+        let parentPath = indexPath[indexPath.length - 2]
+        openMenuList = openedMenus.slice(openedMenus.indexOf(parentPath) + 1)
       } else {
-        openMenuList = openedMenus;
+        openMenuList = openedMenus
       }
       // 关闭菜单
-      openMenuList = openMenuList.reverse();
+      openMenuList = openMenuList.reverse()
       openMenuList.forEach(ele => {
-        this.$refs.navbar.closeMenu(ele);
-      });
-      if (this.navMode == "horizontal") {
-        this.navBgShow = false;
+        this.$refs.navbar.closeMenu(ele)
+      })
+      if (this.navMode == 'horizontal') {
+        this.navBgShow = false
       }
     },
     openMenu() {
-      if (this.navMode == "horizontal") {
-        this.navBgShow = true;
+      if (this.navMode == 'horizontal') {
+        this.navBgShow = true
       }
     },
 
     closeMenu() {
-      if (this.navMode == "horizontal") {
-        this.navBgShow = false;
+      if (this.navMode == 'horizontal') {
+        this.navBgShow = false
       }
     },
 
     closeAll() {
-      let openMenu = this.$refs.navbar.openedMenus.concat([]);
-      openMenu = openMenu.reverse();
+      let openMenu = this.$refs.navbar.openedMenus.concat([])
+      openMenu = openMenu.reverse()
       openMenu.forEach(ele => {
-        this.$refs.navbar.closeMenu(ele);
-      });
-      if (this.navMode == "horizontal") {
-        this.navBgShow = false;
+        this.$refs.navbar.closeMenu(ele)
+      })
+      if (this.navMode == 'horizontal') {
+        this.navBgShow = false
       }
     }
   },
   components: {
     NavBarItem: NavBarItem
   }
-};
+}
 </script>
 <style rel="stylesheet/scss" lang="scss" >
 .el-submenu__title {
