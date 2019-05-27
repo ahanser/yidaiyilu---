@@ -1,54 +1,55 @@
 <template>
-  <div style="padding:  20px;">
-    <el-button type="success" icon="el-icon-check" circle @click="save"></el-button>
-    <my-table :col="col" :data="data"></my-table>
-  </div>
+ <div>
+   <el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>
+
+<el-dialog
+  title="提示"
+  :visible.sync="dialogVisible"
+  width="30%"
+  :before-close="handleClose">
+  <el-select v-model="value" placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+</el-dialog>
+ </div>
 </template>
 
 
 <script>
-import axios from 'axios'
-import MyTable from './MyTable'
-export default {
-  components: {
-    MyTable
-  },
-  data() {
-    return {
-      col: [],
-      data: []
-    }
-  },
-  mounted() {
-    this.init()
-  },
-  methods: {
-    init() {
-      var that = this
-      axios
-        .get(
-          'http://192.168.5.50:8080/api/fundManage/fundDecomp/getFundAdjustInfo?fundYear='
-        )
-        .then(function(res) {
-          that.col = res.data.result.tableHeader
-          that.data = res.data.result.tableData
-        })
+  export default {
+    data() {
+      return {
+           options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value: '',
+        dialogVisible: false
+      };
     },
-    save() {
-      var that = this
-      axios
-        .request({
-          url:
-            'http://192.168.5.50:8080/api/fundManage/fundDecomp/saveFundAdjust',
-          method: 'post',
-          data: that.data
-        })
-        .then(function(res) {
-          console.log('TCL: save -> res', res)
-        })
-    }
-  }
-}
+  
+  };
 </script>
 <style>
 </style>

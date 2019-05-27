@@ -5,6 +5,15 @@
         <div>
           <el-button class="add" @click="add()">上传</el-button>
           <el-button class="batchDel" @click="batchDel()">批量删除</el-button>
+           <el-select v-model="unit" style="width:100%" ref="editClose" class="searchKey" v-if="users=='常伟'?false:(users=='刘瑞'?false:true)">
+            <el-option v-for="unit in units" :key="unit.key" :label="unit.label"
+                       :value="unit.key"></el-option>
+          </el-select>
+           <el-select v-model="item" style="width:100%" ref="editClose1" class="searchKey">
+            <el-option v-for="item in list" :key="item.key" :label="item.label"
+                       :value="item.key"></el-option>
+          </el-select>
+           
           <el-input
             placeholder="请输入内容"
             prefix-icon="el-icon-search"
@@ -33,9 +42,9 @@
           <el-table-column prop="createdate" label="创建时间" align="center"></el-table-column>
           <el-table-column label="操作" width="250" align="center">
             <template slot-scope="scope">
-              <el-button class="update" size="small" @click="edit()">查看</el-button>
-               <el-button class="del" size="small" @click="downLoad()">下载</el-button>
-              <!-- <el-button class="batchDel" size="small" @click="resetPass()">删除</el-button> -->
+              <el-button class="update" size="small" @click="edit()">查看、下载</el-button>
+               <!-- <el-button class="del" size="small" @click="downLoad()">下载</el-button> -->
+              <el-button class="batchDel" size="small" @click="delConfirm()">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -48,13 +57,34 @@
 
     <!-- 新增弹出层样式
     -->
-    <el-dialog  :visible.sync="outerVisible" width="40%">
+    <el-dialog  :visible.sync="outerVisible" width="40%" @close='closeDialog'>
       <!-- 内部操作 -->
       <el-form ref="form" label-width="140px">
-        <el-form-item label="类型：">
+        <!-- <el-form-item label="类型：">
           <el-input></el-input>
+        </el-form-item> -->
+       
+        <el-form-item label="任务建设单位：">
+          
+          <el-select v-model="unit" style="width:100%" ref="editClose">
+            <el-option v-for="unit in units" :key="unit.key" :label="unit.label"
+                       :value="unit.key"></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="文件上传：">
+         <el-form-item label="项目所属系统：">
+          <el-select v-model="item" style="width:100%" ref="editClose1">
+            <el-option v-for="item in list" :key="item.key" :label="item.label"
+                       :value="item.key"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="建设任务编号：">
+          
+          <el-select v-model="build" style="width:100%" ref="editClose">
+            <el-option v-for="build in builds" :key="build.key" :label="build.label"
+                       :value="build.key"></el-option>
+          </el-select>
+        </el-form-item>
+         <el-form-item label="文件上传：">
           <el-upload
             class="upload-demo"
             action="https://jsonplaceholder.typicode.com/posts/"
@@ -62,8 +92,12 @@
             :file-list="fileList3"
           >
             <el-button size="small" type="primary">点击上传</el-button>
+             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </el-upload>
         </el-form-item>
+         <!-- <el-form-item label="建设任务编号：">
+          <el-input placeholder="请输入编号"></el-input>
+        </el-form-item> -->
       </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -93,7 +127,7 @@
         乙方系该区域承包证所登记的承包人，面积、位置地点以承包面积为准。</br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;二、乙方必须配合甲方测量好所征土地的面积，若乙方有特殊原因不、
         能到场的可委托家庭其他成员或亲友代办（须书面的授权委托书）。若、有其他人对该地提出权力要求，甲方有权要求乙方赔偿所造成的
-        损失,否则视为违约，按违约处理。土地详细信息为:</br>
+        损失,否则视为违约，按违约处理。土地详细信息为: </br>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;四至界线:该地块位于（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）(附照片)，东至
         （&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;），西至（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）,南至
         （&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;），北至（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）
@@ -127,6 +161,82 @@ export default {
   data() {
     return {
       fileList3: [], // 上传
+      units:[{
+        key:'0',
+        label:'北京市地震局'
+      },
+      {
+        key:'1',
+        label:'天津市地震局'
+      },
+      {
+        key:'2',
+        label:'河北省地震局'
+      },
+      {
+        key:'3',
+        label:'山西省地震局'
+      },{
+        key:'4',
+        label:'内蒙古自治区地震局'
+      },{
+        key:'5',
+        label:'中国地震局地质研究院'
+      },
+      {
+        key:'6',
+        label:'中国地震台网中心'
+      },
+      {
+        key:'7',
+        label:'中国地震局地球物理勘探中心'
+      },
+      {
+        key:'8',
+        label:'中国地震局第一监测中心'
+      },
+      {
+        key:'9',
+        label:'中国地震局第二监测中心'
+      }
+      ],
+      unit:'0',
+       list:[{
+         key:'0',
+        label:'陆基探测监测系统'
+      },{
+         key:'1',
+        label:'海域探测监测系统'
+      },{
+         key:'2',
+        label:'数据传输系统'
+      },{
+         key:'3',
+        label:'信息处理与服务系统'
+      },{
+         key:'4',
+        label:'运行管理保障系统'
+      }
+      ],
+      item:'0',
+      builds:[{
+            key:'0',
+        label:'LJ-TZ-北京-1'
+        },{
+            key:'1',
+        label:'LJ-TZ-北京-2'
+        },{
+            key:'2',
+        label:'LJ-TZ-北京-3'
+        },{
+            key:'3',
+        label:'LJ-TZ-北京-4'
+        },{
+            key:'4',
+        label:'LJ-TZ-北京-5'
+        }
+      ],
+      build:'0',
       choose: [
         {
           id: "1",
@@ -194,43 +304,50 @@ export default {
         {
           date: "1",
           unit: "北京市地震局",
-          system: "路基探测监测系统",
+          system: "陆基探测监测系统",
           number:"LJ-TZ-北京-1",
           name:"征地合同.doc",
-          creater:"李欣",
+          creater:"刘瑞",
           createdate:"2019-01-16 12:10:11"
         },
         {
           date: "2",
           unit: "北京市地震局",
-          system: "路基探测监测系统",
+          system: "陆基探测监测系统",
           number:"LJ-TZ-北京-1",
           name:"土建合同.doc",
-          creater:"李欣",
+          creater:"刘瑞",
           createdate:"2019-01-17 11:10:12"
         },
         {
           date: "3",
           unit: "北京市地震局",
-          system: "路基探测监测系统",
+          system: "陆基探测监测系统",
           number:"LJ-TZ-北京-1",
           name:"堪地合同.doc",
-          creater:"李欣",
+          creater:"刘瑞",
           createdate:"2019-01-18 12:10:11"
         },
         {
           date: "4",
           unit: "北京市地震局",
-          system: "路基探测监测系统",
+          system: "陆基探测监测系统",
           number:"LJ-TZ-北京-1",
           name:"验收合同.doc",
-          creater:"李欣",
+          creater:"刘瑞",
           createdate:"2019-01-16 12:10:11"
         }
       ]
     };
   },
   methods: {
+    closeDialog(){
+     this.$refs.editClose.blur()
+     this.$refs.editClose1.blur()
+     this.$refs.editClose2.blur()
+     this.$refs['from'].resetFields();
+     
+   },
     add() {
       this.outerVisible = true;
     },
@@ -318,6 +435,10 @@ export default {
   padding: 25px 35px;
   .content {
     // f8f9fa
+    .searchKey{
+      width: 15%!important;
+      margin-left: 30px;
+    }
     .el-table {
       font-size: 13px;
     }

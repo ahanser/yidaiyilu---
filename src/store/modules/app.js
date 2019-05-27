@@ -9,7 +9,8 @@ const app = {
     },
     device: 'desktop'
     ,
-    tips:false
+    tips:false,
+    administrators:false,
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {

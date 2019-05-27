@@ -33,7 +33,7 @@
 
     <!-- 新增弹出层样式
     -->
-    <el-dialog title="新建项目" :visible.sync="outerVisible" width="40%">
+    <el-dialog title="新建项目" :visible.sync="outerVisible" width="30%">
       <!-- 内部操作 -->
       <el-form ref="form" label-width="140px">
         <el-form-item label="项目名称：">
@@ -105,7 +105,7 @@ export default {
         {
           date: "1",
           projectname: "一带一路地震监测台网项目",
-          budget: "330000",
+          budget: "10000",
           remark: ""
         }
       ]

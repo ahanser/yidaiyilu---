@@ -3,9 +3,26 @@
     <div class="content">
       {{width}}
       <el-row>
+
+         <div class="header">
+             
+              <el-select  v-model="item" placeholder="请选择" size="mini" style="float:right;margin-left:10px">
+                       <el-option v-for="item in list" :key="item.key" :label="item.label"
+                       :value="item.key"></el-option>
+              </el-select>
+              <el-select  v-model="child" placeholder="请选择" size="mini" style="float:right;" v-if="users=='常伟'?false:(users=='刘瑞'?false:true)">
+                       <el-option v-for="child in tableData" :key="child.key" :label="child.label"
+                       :value="child.key"></el-option>
+              </el-select>
+            </div>
+      </el-row>
+
+      <el-row>
         <el-col :span="10">
           <div class="item">
-            <div class="header">总预算完成度(万元)</div>
+             <div class="header">
+            <span> 总预算完成度</span>
+             </div>
             <div>
               <div id="main" style="height:300px;"></div>
             </div>
@@ -14,7 +31,7 @@
         <el-col :span="14">
           <div class="item">
             <div class="header">
-              <span>分系统完成度(单位:万元)</span>
+              <span>分系统完成度</span>
             </div>
             <div>
               <div id="main1" style="height:300px;"></div>
@@ -25,7 +42,7 @@
       <el-row>
         <el-col :span="14">
           <div class="item">
-            <div class="header">各工作阶段完成度(单位：万元)</div>
+            <div class="header">各工作阶段完成度</div>
             <div>
               <div id="main2" style="height:300px;"></div>
             </div>
@@ -34,11 +51,8 @@
         <el-col :span="10">
           <div class="item">
             <div class="header">
-              <span>各任务完成度(单位：万元)</span>
-              <el-select  v-model="item" placeholder="请选择" size="mini" style="float:right">
-                       <el-option v-for="item in list" :key="item.key" :label="item.label"
-                       :value="item.key"></el-option>
-              </el-select>
+              <span>各任务完成度</span>
+          <!-- (万元) -->
             </div>
             <div>
               <div id="main3" style="height:300px;"></div>
@@ -60,7 +74,13 @@ export default {
     this.init3();
     this.init4();
   },
-  computed: {},
+  computed: {
+     users() {
+      let user = JSON.parse(window.sessionStorage.getItem('userInfor')).username
+      return user
+    },
+ 
+  },
   watch: {},
   data() {
     return {
@@ -71,7 +91,7 @@ export default {
       list: [
         {
           key: "0",
-          label: "路基探测监测系统"
+          label: "陆基探测监测系统"
         },
         {
           key: "1",
@@ -90,7 +110,42 @@ export default {
           label: "运行管理保障系统"
         }
       ],
-      item: "0"
+      item: "0",
+      tableData:[
+        {
+          key: "0",
+          label: "北京地震局"
+        },
+        {
+          key: "1",
+          label: "重庆地震局"
+        },
+        {
+          key: "2",
+          label: "河北省地震局"
+        },
+        {
+          key: "3",
+          label: "山西省地震局"
+        },
+        {
+          key: "4",
+          label: "内蒙古自治区地震局"
+        },
+         {
+          key: "5",
+          label: "中国地震局地震研究院"
+        },
+         {
+          key: "6",
+          label: "中国地震局地球物理勘探中心"
+        },
+         {
+          key: "7",
+          label: "中国地震局第一监测中心"
+        }
+      ],
+      child:"0"
     };
   },
   methods: {
@@ -101,7 +156,7 @@ export default {
 
       let option = {
         tooltip: {
-          formatter: "{a} <br/>{b} : {c}%"
+          formatter: "{a} {b} : {c}%"
         },
         grid: {
           left: "0%",
@@ -110,24 +165,26 @@ export default {
           containLabel: true
         },
         title: {
-          show: true, //默认为true，可以省略
-          text: "总预算:3300万元",
+          //show: true, //默认为true，可以省略
+          text: "总预算:10000万元",
           textStyle: {
-            color: "#939aab",
-            fontStyle: "oblique",
+            color: "#fff",
+            //fontStyle: "oblique",
             fontWeight: "400",
             fontFamily: "sans-serif",
             fontSize: "14"
           },
-
-          subtext: "已使用:2200万元",
+          subtext: "已使用:5300万元",
           x: "right"
         },
+        
         series: [
           {
-            name: "业务指标",
+            name: "",
             type: "gauge",
+    
             detail: { formatter: "{value}%" }, //仪表盘显示数据
+            radius : '100%',
             axisLine: {
               //仪表盘轴线样式
               lineStyle: {
@@ -139,11 +196,14 @@ export default {
               length: 20
             },
             data: [
-              {
-                value: 92,
-                name: "总额度",
-                
-              }
+              {  name: "总额度",
+                value: 53,
+              
+                textStyle:{
+                 color: "#fff"
+                  }
+                },
+              
             ],
 
             markPoint: {
@@ -199,20 +259,71 @@ export default {
 
       //初始化数据
       var category = [
-        "路基检测系统",
-        "海域检测系统",
-        "数据传输系统",
-        "信息管理系统",
-        "运行检测系统"
+        "小孔径台阵",
+        "综合台",
+        "科学台阵",
+        "重力台",
+        "地磁台",
+        '机动车组'
       ];
-      var barData = [310, 2142, 1218, 581, 4310];
-
+      var barData = [116, 21, 72, 98, 43,50];
+      var costData=[1000,580,300,750,620,862];
+      var prveData=[1160,121,216,735,266,431];
+      
       var option = {
+        
         tooltip: {
           trigger: "axis",
-          axisPointer: {
-            type: "shadow"
+          //formatter: "{a} <br/>{b}: {c}%<br/>",
+          
+         formatter: function (params,ticket,callback) {
+           //if(params.dataIndex)
+            console.log(params[0].dataIndex)
+                var res = params[0].name;
+            if(params[0].dataIndex==0){
+                var res = params[0].name;
+                for (var i = 0, l = params.length; i < l; i++) {
+                res += '<br/>' + params[i].seriesName + ' : ' + params[i].value+'%'+'<br/>'+'预算花费:'+costData[0]+'万元'+'<br/>'+'实际花费:'+prveData[0]+'万元'
+                }          
+            }else if(params[0].dataIndex==1){
+              //var res = params[0].name;
+                for (var i = 0, l = params.length; i < l; i++) {
+                res += '<br/>' + params[i].seriesName + ' : ' + params[i].value+'%'+'<br/>'+'预算花费:'+costData[1]+'万元'+'<br/>'+'实际花费:'+prveData[1]+'万元'
+                }    
+            }
+            else if(params[0].dataIndex==2){
+              //var res = params[0].name;
+                for (var i = 0, l = params.length; i < l; i++) {
+                res += '<br/>' + params[i].seriesName + ' : ' + params[i].value+'%'+'<br/>'+'预算花费:'+costData[2]+'万元'+'<br/>'+'实际花费:'+prveData[2]+'万元'
+                }    
+            }
+            else if(params[0].dataIndex==3){
+              //var res = params[0].name;
+                for (var i = 0, l = params.length; i < l; i++) {
+                res += '<br/>' + params[i].seriesName + ' : ' + params[i].value+'%'+'<br/>'+'预算花费:'+costData[3]+'万元'+'<br/>'+'实际花费:'+prveData[3]+'万元'
+                }    
+            }
+            else if(params[0].dataIndex==4){
+              //var res = params[0].name;
+                for (var i = 0, l = params.length; i < l; i++) {
+                res += '<br/>' + params[i].seriesName + ' : ' + params[i].value+'%'+'<br/>'+'预算花费:'+costData[4]+'万元'+'<br/>'+'实际花费:'+prveData[4]+'万元'
+                }    
+            }
+            else if(params[0].dataIndex==5){
+              //var res = params[0].name;
+                for (var i = 0, l = params.length; i < l; i++) {
+                res += '<br/>' + params[i].seriesName + ' : ' + params[i].value+'%'+'<br/>'+'预算花费:'+costData[5]+'万元'+'<br/>'+'实际花费:'+prveData[5]+'万元'
+                }    
+            }
+           
+                 return res;
+           
+        },
+
+          axisPointer:{
+          type: "shadow"
           }
+        
         },
         color: ["#35b8be", "#889cff", "#ccc", "#000", "#fff"],
         grid: {
@@ -221,7 +332,9 @@ export default {
           bottom: "3%",
           containLabel: true
         },
+ 
         xAxis: {
+      
           type: "value",
           axisLine: {
             lineStyle: {
@@ -232,9 +345,13 @@ export default {
           },
           axisTick: {
             show: false
-          }
+          },
+            axisLabel: {
+                formatter: '{value} %'
+            }
         },
         yAxis: {
+        
           type: "category",
           data: category,
           splitLine: { show: false },
@@ -255,10 +372,10 @@ export default {
         },
         series: [
           {
-            name: "已使用/总预算",
+            name: "实际花费占比率",
             type: "bar",
-            data: barData,
-            barWidth: 14,
+            data:barData,
+            barWidth: '60%',
             barGap: 10,
             smooth: true,
             label: {
@@ -267,9 +384,10 @@ export default {
                 position: "right",
                 offset: [5, -2],
                 textStyle: {
-                  color: "#F68300",
-                  fontSize: 13
-                }
+                color: "#F68300",
+                fontSize: 13,
+                },
+              
               }
             },
             itemStyle: {
@@ -277,11 +395,24 @@ export default {
                 barBorderRadius: 7
               },
               normal: {
-                barBorderRadius: 7,
-                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                  { offset: 0, color: "#3977E6" },
-                  { offset: 1, color: "#37BBF8" }
-                ])
+               barBorderRadius: 7,
+                // color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                //   { offset: 0, color: "#3977E6" },
+                //   { offset: 1, color: "#37BBF8" }
+                // ])
+                  color: function (params) {
+                           var index_num = params.value;
+                           for (var z = 0; z < 5; z++) {
+                               if (index_num > 100) {
+                                   return '#FF3030';
+                               }
+                               else {
+                                   return '#37BBF8';
+                               }
+                           }
+                           
+                        
+                       }
               }
             }
           }
@@ -304,6 +435,7 @@ export default {
         },
         color: ["#33b6be", "#899cfb"],
         calculable: true,
+              
         xAxis: [
           {
             type: "category",
@@ -315,16 +447,20 @@ export default {
               }
             },
             data: [
-              "堪选",
-              "征地",
+              "勘选",
+              "征（租）地",
+              "前期工作咨询",
+              "节能影响评估",
+              "工程设计",
               "土建",
-              "改造",
               "设备购置",
-              "仪器架设",
-              "试运行",
-              "验收"
-            ]
-          }
+              "仪器架设"
+            ],
+            axisLabel: { 
+              interval:0,//横轴信息全部显示 
+            },  
+          },
+           
         ],
         yAxis: [
           {
@@ -374,9 +510,13 @@ export default {
           trigger: "axis"
         },
         legend: {
-          data: ["邮件营销", "联盟广告", "视频广告", "直接访问", "搜索引擎"],
+          data: ["陆基探测系统", "海域探测检测系统", "数据传输系统", "信息传输系统", "运行保障系统"],
+          x: "right", 
+          y: "top", 
           icon: "circle",
-          textStyle: { color: "#939aab" }
+          textStyle: { color: "#939aab" },
+          color: ["#33b6be", "#899cfb"],
+        calculable: true,
         },
         grid: {
           left: "3%",
@@ -409,7 +549,7 @@ export default {
         },
         series: [
           {
-            name: "路基探测系统",
+            name: "陆基探测系统",
             type: "line",
             stack: "总量",
             smooth: true,
@@ -450,9 +590,29 @@ export default {
       this.chart3.setOption(option);
     }
   }
-};
+            };
 </script>
 <style rel="stylesheet/scss" lang="scss" >
+ .header {
+      height: 40px;
+      line-height: 40px;
+      border-radius: 10px;
+      background: #1f2640;
+      z-index: 200;
+      color: #939aab;
+      font-size: 13px;
+      padding: 0 15px;
+      input{
+        background-color: rgb(14, 19,40);
+        color: #ccc;
+        margin-left: 5px;
+        border: 1px solid rgb(54,202,207);
+        &:hover{
+            border: 1px solid rgb(54,202,207)!important;
+        }
+      }
+    
+    }
 #container1 {
   padding: 25px 35px;
   .content {
@@ -474,6 +634,13 @@ export default {
       color: #939aab;
       font-size: 13px;
       padding: 0 15px;
+      input{
+        background-color: rgb(14, 19,40);
+        color: #ccc;
+        margin-left: 5px;
+           border: 1px solid rgb(54,202,207)
+      }
+    
     }
     .title {
       font-size: 12px;

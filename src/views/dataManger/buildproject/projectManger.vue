@@ -2,7 +2,8 @@
   <div class="container">
     <div class="content">
       <h2>
-        <i class="el-icon-back" style="cursor:pointer" @click="backHome()"></i> 项目名称：一带一路
+      
+         <el-button type="primary" size="medium" @click="backHome()" style="margin-right:20px" round>返回</el-button> 项目名称：一带一路
       </h2>
       <div>
         <div>
@@ -20,11 +21,11 @@
           :data="tableData"
           tooltip-effect="dark"
           style="width: 100%"
-          border
           @selection-change="handleSelectionChange"
+          border
         >
           <el-table-column type="selection" width="40"></el-table-column>
-          <el-table-column label="序号" width="70" align="center">
+          <el-table-column label="序号" width="50" align="center">
             <template slot-scope="scope">{{ scope.row.date }}</template>
           </el-table-column>
           <el-table-column prop="number" label="任务编号" width="120" align="center"></el-table-column>
@@ -37,7 +38,7 @@
           <el-table-column label="操作" align="center" width="230">
             <template slot-scope="scope">
               <el-button class="update" size="small" @click="edit()">详情</el-button>
-              <el-button class="del" size="small" @click="manger()">管理</el-button>
+              <el-button class="del" size="small" @click="manger()">编辑</el-button>
               <el-button class="batchDel" size="small" @click="delConfirm()">删除</el-button>
             </template>
           </el-table-column>
@@ -49,46 +50,120 @@
       </div>
     </div>
 
+<!-- 任务详情 -->
+<el-dialog title="任务详情" :visible.sync="taskVisible" width="60%" @close='closeDialog'> 
+     <div class="moreInfoDetail">
+     
+      <div>
+        <el-table :data="tableData" border style="width: 100%">
+          <el-table-column prop="number" label="任务编号" width="180" align="center"></el-table-column>
+          <el-table-column prop="system" label="任务所属系统" width="180" align="center"></el-table-column>
+          <el-table-column prop="content" label="建设内容" align="center"></el-table-column>
+          <el-table-column prop="process" label="任务过程" align="center"></el-table-column>
+          <el-table-column prop="taskstatus" label="任务状态" align="center"></el-table-column>
+          <el-table-column prop="quantity" label="建设数量" align="center"></el-table-column>
+          <el-table-column prop="allbudget" label="任务总预算（万元）" align="center"></el-table-column>
+        </el-table>
+      </div>
+
+      <div>
+        <p>任务建设详情</p>
+
+        <el-table :data="taskData" border style="width: 100%">
+          <el-table-column prop="process" label="任务过程" width="180" align="center"></el-table-column>
+          <el-table-column prop="budget" label="预算金额（万元）" width="180" align="center"></el-table-column>
+          <el-table-column prop="process2" label="任务过程" align="center"></el-table-column>
+          <el-table-column prop="budget2" label="预算金额（万元）" align="center"></el-table-column>
+          <el-table-column prop="process3" label="任务过程" align="center"></el-table-column>
+          <el-table-column prop="budget3" label="预算金额（万元）" align="center"></el-table-column>
+        </el-table>
+      </div>
+      </div>
+    </el-dialog>
+
     <!-- 新增弹出层样式
     -->
-    <el-dialog title="新建分项目" :visible.sync="outerVisible" width="50%">
+    <el-dialog title="新建分项目" :visible.sync="outerVisible" width="35%" @close='closeDialog' v-if="outerVisible"> 
       <!-- 内部操作 -->
       <el-form ref="form" label-width="120px">
-        <el-form-item label="项目所属系统：">
-          <el-select v-model="item" style="width:100%">
+        <el-form-item label="项目所属系统：" prop="list.item">
+          <el-select v-model="item" style="width:100%" ref="editClose2">  
             <el-option v-for="item in list" :key="item.key" :label="item.label"
-                       :value="item.key"></el-option>
+                       :value="item.key"></el-option>    
           </el-select>
         </el-form-item>
-        <el-form-item label="任务建设内容：">
-          <el-select v-model="content" size="mini" style="width:100%">
+        <el-form-item label="任务建设内容：" prop="contents.content">
+          <el-select v-model="content" size="mini" style="width:100%" ref="editClose1">
             <el-option v-for="content in contents" :key="content.key" :label="content.label"
-                       :value="content.key"></el-option>
+                       :value="content.key" :v-model="content.key"
+                        ></el-option>
           </el-select>
         </el-form-item>
-          <el-form-item label>
-          <el-checkbox>3×3台阵</el-checkbox>
-          <el-input style="width:80px;"></el-input>个
+          <el-form-item label v-if="content=='0'">
+
+           
+        <el-radio-group v-model="radio3" size="small">
+              <el-radio-button label="地震台阵"></el-radio-button>
+              <el-radio-button label="火山次声台"></el-radio-button>
+            </el-radio-group>
         </el-form-item>
-        <el-form-item label>
-          <el-checkbox>5×5台阵</el-checkbox>
-          <el-input style="width:80px;"></el-input>个
-        </el-form-item>
+     
         <el-form-item label="任务建设数目：">
-          <el-input value="5"></el-input>
+          <el-input placeholder="请输入数目"></el-input>
         </el-form-item>
         <el-form-item label="任务建设单位：">
-          <el-select v-model="unit" style="width:100%">
+          <el-select v-model="unit" style="width:100%" ref="editClose" placeholder="请输入单位">
             <el-option v-for="unit in units" :key="unit.key" :label="unit.label"
                        :value="unit.key"></el-option>
           </el-select>
         </el-form-item>
       
       </el-form>
-      <div style="height:150px;overflow-y:scroll">
+      <div style="height:200px;overflow-y:scroll">
         <el-form size="mini" label-width="120px">
           <el-form-item label="任务过程：">
-            <el-checkbox>堪选</el-checkbox>
+            <el-checkbox v-model="checked">勘选</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              style="margin-left:30px"
+              @click="explan()"
+            >补充说明</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox>征（租）地</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              style="margin-left:30px"
+              @click="explan()"
+            >补充说明</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox>前期工作咨询</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              style="margin-left:30px"
+              @click="explan()"
+            >补充说明</el-button>
+          </el-form-item>
+
+          <el-form-item>  
+            <el-checkbox>节能影响评估</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              style="margin-left:30px"
+              @click="explan()"
+            >补充说明</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox>工程设计</el-checkbox>
             <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
             <el-button
               icon="el-icon-edit"
@@ -108,18 +183,7 @@
             >补充说明</el-button>
           </el-form-item>
           <el-form-item>
-            <el-checkbox>试运行</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-            <el-button
-              icon="el-icon-edit"
-              type="text"
-              style="margin-left:30px"
-              @click="explan()"
-            >补充说明</el-button>
-          </el-form-item>
-
-          <el-form-item>
-            <el-checkbox>前期工作咨询费</el-checkbox>
+            <el-checkbox>设备购置</el-checkbox>
             <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
             <el-button
               icon="el-icon-edit"
@@ -129,7 +193,7 @@
             >补充说明</el-button>
           </el-form-item>
           <el-form-item>
-            <el-checkbox>节能影响评估费</el-checkbox>
+            <el-checkbox>仪器架设</el-checkbox>
             <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
             <el-button
               icon="el-icon-edit"
@@ -139,7 +203,7 @@
             >补充说明</el-button>
           </el-form-item>
           <el-form-item>
-            <el-checkbox>安全测评</el-checkbox>
+            <el-checkbox>验收</el-checkbox>
             <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
             <el-button
               icon="el-icon-edit"
@@ -148,117 +212,7 @@
               @click="explan()"
             >补充说明</el-button>
           </el-form-item>
-          <el-form-item>
-            <el-checkbox>培训费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-            <el-button
-              icon="el-icon-edit"
-              type="text"
-              style="margin-left:30px"
-              @click="explan()"
-            >补充说明</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>建设其他费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-            <el-button
-              icon="el-icon-edit"
-              type="text"
-              style="margin-left:30px"
-              @click="explan()"
-            >补充说明</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>设备购置费(必选)</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-            <el-button
-              icon="el-icon-edit"
-              type="text"
-              style="margin-left:30px"
-              @click="explan()"
-            >补充说明</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>征地</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-            <el-button
-              icon="el-icon-edit"
-              type="text"
-              style="margin-left:30px"
-              @click="explan()"
-            >补充说明</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>改造</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-            <el-button
-              icon="el-icon-edit"
-              type="text"
-              style="margin-left:30px"
-              @click="explan()"
-            >补充说明</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>工程设计费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-            <el-button
-              icon="el-icon-edit"
-              type="text"
-              style="margin-left:30px"
-              @click="explan()"
-            >补充说明</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>工程监理费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-            <el-button
-              icon="el-icon-edit"
-              type="text"
-              style="margin-left:30px"
-              @click="explan()"
-            >补充说明</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>管理费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-            <el-button
-              icon="el-icon-edit"
-              type="text"
-              style="margin-left:30px"
-              @click="explan()"
-            >补充说明</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>建设工程费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-            <el-button
-              icon="el-icon-edit"
-              type="text"
-              style="margin-left:30px"
-              @click="explan()"
-            >补充说明</el-button>
-          </el-form-item>
-
-          <el-form-item>
-            <el-checkbox>基本预备费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-            <el-button
-              icon="el-icon-edit"
-              type="text"
-              style="margin-left:30px"
-              @click="explan()"
-            >补充说明</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>验收(必选)</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-            <el-button icon="el-icon-edit" type="text" style="margin-left:30px">补充说明</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>仪器架设(必选)</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-            <el-button icon="el-icon-edit" type="text" style="margin-left:30px">补充说明</el-button>
-          </el-form-item>
+         
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
@@ -267,62 +221,199 @@
       </div>
     </el-dialog>
 
-    <!-- 修改 -->
+    <!-- 编辑 -->
 
-    <el-dialog title="修改任务" :visible.sync="isEdit
-    " width="40%">
+    <el-dialog title="编辑任务" :visible.sync="isEdit" 
+    width="55%" @close='closeDialog' v-if="isEdit">
       <!-- 内部操作 -->
       <el-form ref="form" label-width="120px">
-        <el-form-item label="分项目系统：">
-          <el-input disabled placeholder="路基勘测系统"></el-input>
+        <el-form-item label="分项目系统：" prop="陆基勘测系统">
+          <el-input disabled value="陆基勘测系统"></el-input>
         </el-form-item>
-        <el-form-item label="任务建设内容：">
-          <span>综合台</span>
+        <el-form-item label="任务建设内容：" prop="content">
+          <el-select v-model="content" size="mini" style="width:100%" ref="editClose1">
+            <el-option v-for="content in contents" :key="content.key" :label="content.label"
+                       :value="content.key" :v-model="content.key"
+                        ></el-option>
+          </el-select>
+     
         </el-form-item>
         <el-form-item label="任务建设数目：">
-          <span>26台</span>
+            <el-input value="5"></el-input>
         </el-form-item>
         <el-form-item label="任务建设单位：">
-          <el-select v-model="unit" placeholder="请选择" style="width:100%">
-            <el-option v-for="unit in units" :key="unit.key" :label="unit.label"
-                       :value="unit.key"></el-option>
+          <el-select v-model="unit2" placeholder="请选择" style="width:100%" clearable ref="editClose">
+            <el-option v-for="unit2 in units2" :key="unit2.key" :label="unit2.label"
+                       :value="unit2.key"></el-option>
           </el-select>
         </el-form-item>
-      </el-form>
+          <div style="height:200px;overflow-y:scroll">
+        <el-form size="mini" label-width="120px">
+          <el-form-item label="任务过程：">
+            <el-checkbox v-model="checked">勘选</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" value="1114" ></el-input>万元
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              style="margin-left:30px"
+              @click="explan()"
+            >补充说明</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox>征（租）地</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" value="4"></el-input>万元
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              style="margin-left:30px"
+              @click="explan()"
+            >补充说明</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox>前期工作咨询</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" value="248" ></el-input>万元
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              style="margin-left:30px"
+              @click="explan()"
+            >补充说明</el-button>
+          </el-form-item>
 
-      <div>
-        <el-button
+          <el-form-item>  
+            <el-checkbox>节能影响评估</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" value="67" ></el-input>万元
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              style="margin-left:30px"
+              @click="explan()"
+            >补充说明</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox>工程设计</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" value="6277" ></el-input>万元
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              style="margin-left:30px"
+              @click="explan()"
+            >补充说明</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox>土建</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" value="22" ></el-input>万元
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              style="margin-left:30px"
+              @click="explan()"
+            >补充说明</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox>设备购置</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" value="11" ></el-input>万元
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              style="margin-left:30px"
+              @click="explan()"
+            >补充说明</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox>仪器架设</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" value="20" ></el-input>万元
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              style="margin-left:30px"
+              @click="explan()"
+            >补充说明</el-button>
+          </el-form-item>
+               <el-form-item>
+            <el-checkbox>试运行</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" value="1801" ></el-input>万元
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              style="margin-left:30px"
+              @click="explan()"
+            >补充说明</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox>验收</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" value="65" ></el-input>万元
+            <el-button
+              icon="el-icon-edit"
+              type="text"
+              style="margin-left:30px"
+              @click="explan()"
+            >补充说明</el-button>
+          </el-form-item>
+         
+        </el-form>
+      </div>
+      </el-form>
+        
+    
+       
+      <div class="updateShow">
+          <el-button
+          size="medium"
+          style="float:left; margin-bottom:25px;"
+         class="update"
+          @click="showTable"
+          :icon="iconType"
+        ></el-button>
+        <!-- <el-button
           size="small"
           style="float:right; margin-bottom:30px;"
           class="update"
           @click="newSubtasks()"
-        >新建子任务</el-button>
-        <el-table :data="tableData1" border style="width: 100%">
+        >新建子任务</el-button> -->
+        <div v-if="tableInfo">
+        <el-table :data="tableData1" border style="width: 100%"  >
           <el-table-column prop="number" label="任务建设编号"></el-table-column>
-          <el-table-column prop="name" label="任务名称"></el-table-column>
-          <el-table-column prop="remark" label="备注名"></el-table-column>
-          <el-table-column prop="process" label="建设进度"></el-table-column>
-          <el-table-column prop="transform" label="转移至">
-            <template scope="scope">
-              <el-select v-model="unit" placeholder="请选择" style="width:100%">
-             <el-option v-for="unit in units" :key="unit.key" :label="unit.label"
-                       :value="unit.key"></el-option>
-          </el-select>
+          <el-table-column label="任务名称" width="200" prop="name">
+             <template slot-scope="scope" style="border:none"> 
+               <el-input v-model="scope.row.name" class='borderNone'></el-input>
+             </template>
+          </el-table-column>
+          <el-table-column label="备注名" width="100" prop="remark">
+              <template slot-scope="scope"> 
+               <el-input v-model="scope.row.remark" class='borderNone'></el-input>
+             </template>
+          </el-table-column>
+          <el-table-column label="建设进度" prop="process">
+             <template slot-scope="scope"> 
+               <el-input v-model="scope.row.process" class='borderNone'></el-input>
+             </template>
+          </el-table-column>
+          <el-table-column label="转移至">
+            <template slot-scope="scope">
+              <el-select v-model="unit1" placeholder="请选择" style="width:100%">
+                  <el-option v-for="unit1 in units1" :key="unit1.key" :label="unit1.label"
+                             :value="unit1.key"></el-option>
+              </el-select>
             </template>
           </el-table-column>
           <el-table-column label="转移">
-            <template scope="scope">
+            <template slot-scope="scope">
              <el-button @click="definite()" class="definite" size="small">确定转移</el-button>
             </template>
           </el-table-column>
-        </el-table>
-      </div>
-
-      <div>
+           </el-table>
+            <div>
         <h5>操作日志:</h5>
         <el-input type="textarea" style="width:100%" v-model="input">
         </el-input>
       </div>
+       
+        </div>
+      </div>
+
+
+    
       <div slot="footer" class="dialog-footer">
         <el-button @click="editSave()" class="add" size="small">保存</el-button>
         <el-button @click="isEdit=false" class="cancel" size="small">取消</el-button>
@@ -333,7 +424,7 @@
       <div class="info">
         <span style="color:#fc6c5d">
           <i class="el-icon-info"></i>
-          {{ tips}}
+          {{tips}}
         </span>
       </div>
       <div slot="footer" class="dialog-footer">
@@ -343,7 +434,8 @@
     </el-dialog>
 
     <!-- 补充说明 -->
-    <el-dialog title="补充说明" :visible.sync="isExplan" width="40%" :before-close="handleClose">
+    <el-dialog title="补充说明" :visible.sync="isExplan" width="40%">
+    
       <table class="table" cellspacing="0" style="border-radius:10px;">
         <tbody>
           <tr>
@@ -428,26 +520,42 @@
     </el-dialog>
 
     <!-- 新建子任务弹出层 -->
-    <el-dialog title="新增子任务" :visible.sync="isSubtask" width="30%" :before-close="handleClose">
+    <el-dialog title="新增子任务" :visible.sync="isSubtask" width="30%" @close='closeDialog'>
       <el-form ref="form" label-width="120px">
-        <el-form-item label="任务所属系统：">
-          <el-select style="width:100%" placeholder="请选择">
-            <el-option>路基探测系统</el-option>
+     
+         <el-form ref="form" label-width="120px">
+        <el-form-item label="项目所属系统：">
+          <el-select v-model="item" style="width:100%" ref="editClose1">
+            <el-option v-for="item in list" :key="item.key" :label="item.label"
+                       :value="item.key"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="建设内容：">
-          <el-select size="mini" style="width:100%" placeholder="请选择">
-            <el-option>台阵</el-option>
+        <el-form-item label="任务建设内容：" >
+          <el-select v-model="content" size="mini" style="width:100%" ref="editClose2">
+            <el-option v-for="content in contents" :key="content.key" :label="content.label"
+                       :value="content.key" :v-model="content.key"></el-option>
           </el-select>
         </el-form-item>
+          <el-form-item label v-if="content=='0'">
+      
+           
+        <el-radio-group v-model="radio3" size="small">
+              <el-radio-button label="地震台阵"></el-radio-button>
+              <el-radio-button label="火山次声台"></el-radio-button>
+            </el-radio-group>
+        </el-form-item>
+     
         <el-form-item label="任务建设数目：">
-          <el-input></el-input>
+          <el-input value="5"></el-input>
         </el-form-item>
         <el-form-item label="任务建设单位：">
-          <el-select style="width:100%" placeholder="请选择">
-            <el-option>国际地震局</el-option>
+          <el-select v-model="unit" style="width:100%" ref="editClose">
+            <el-option v-for="unit in units" :key="unit.key" :label="unit.label"
+                       :value="unit.key"></el-option>
           </el-select>
         </el-form-item>
+      
+      </el-form>
         <el-form-item label="备注名:">
           <el-input></el-input>
         </el-form-item>
@@ -461,7 +569,24 @@
       <div style="height:150px;overflow-y:scroll">
         <el-form size="mini" label-width="120px">
           <el-form-item label="任务过程：">
-            <el-checkbox>堪选</el-checkbox>
+            <el-checkbox v-model="checked">勘选</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox>征（租）地</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox>前期工作咨询</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
+          </el-form-item>
+
+          <el-form-item>
+            <el-checkbox>节能影响评估</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox>工程设计</el-checkbox>
             <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
           </el-form-item>
           <el-form-item>
@@ -469,76 +594,27 @@
             <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
           </el-form-item>
           <el-form-item>
+            <el-checkbox>设备购置</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
+          </el-form-item>
+          <el-form-item>
+            <el-checkbox>仪器架设</el-checkbox>
+            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
+          </el-form-item>
+          <el-form-item>
             <el-checkbox>试运行</el-checkbox>
             <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
           </el-form-item>
-
           <el-form-item>
-            <el-checkbox>前期工作咨询费</el-checkbox>
+            <el-checkbox>验收</el-checkbox>
             <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
           </el-form-item>
-          <el-form-item>
-            <el-checkbox>节能影响评估费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>安全测评</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>培训费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>建设其他费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>设备购置费(必选)</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>征地</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>改造</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>工程设计费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>工程监理费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>管理费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>建设工程费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-          </el-form-item>
-
-          <el-form-item>
-            <el-checkbox>基本预备费</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>验收(必选)</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox>仪器架设(必选)</el-checkbox>
-            <el-input style="width:100px;margin-right:30px;" placeholder="预算金额"></el-input>万元
-          </el-form-item>
+        
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button @click="isSubtask = false">取 消</el-button>
+        <el-button type="primary" @click="isSubtask = false">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -546,13 +622,19 @@
 
 <script>
 import { mapGetters } from "vuex";
-
+import $ from 'jquery'
 export default {
   data() {
     return {
-      input:'2019年1月16日201901RW_1进行了转移操作，转移至天津市地震局。法人单位领导王瑞萍操作',
+      input:'2019年1月16日进行了转移操作，转移至天津市地震局。法人单位领导王瑞萍操作',
       isSubtask: false, // 新建子任务状态
       tableData1: [],
+      taskVisible:false,//任务详情默认
+      tableInfo:false,
+      radio:'1',
+      Flag:true,
+      checked:true,
+      radio3:'地震台阵',//默认选中的单选
       isExplan: false, //  补充说明显示状态
       multipleSelection: [],
       options: [
@@ -603,91 +685,115 @@ export default {
           ]
         }
       ],
+      iconType:'el-icon-arrow-down',
+      tzShow:true,//台阵的显隐
       outerVisible: false,
       innerVisible: false,
       isEdit: false, // 修改弹出层
       tips: "",
+       taskData: [
+        {
+          process:"勘选",
+          budget:"1114",
+          process2:"征（租）地",
+          budget2:"4",
+          process3:"前期工作咨询",
+          budget3:"248",
+        },
+         {
+          process:"节能影响评估",
+          budget:"67",
+          process2:"工程设计",
+          budget2:"6277",
+          process3:"土建",
+          budget3:"22",
+         
+        },
+         {
+          process:"设备购置",
+          budget:"11",
+          process2:"仪器架设",
+          budget2:"20",
+          process3:"试运行",
+          budget3:"1801",  
+        },
+         {
+          process:"验收",
+          budget:"65",
+        },
+        
+      
+      ],
       tableData: [
         {
           date: "1",
           number:"201901RW_1",
-          system: "路基探测监测系统",
-          content: "综合台",
-          process:"征地",
+          system: "陆基探测监测系统",
+          content: "小孔径台阵 --地震台阵",
+          process:"勘选",
           taskstatus:"进行中",
-          quantity:"26",
-          allbudget:"12725.16"
+          quantity:"5",
+          allbudget:"9629"
         },
-        {
-          date: "2",
-          number:"201901RW_2",
-          system: "路基探测监测系统",
-          content: "重力",
-          process:"堪选",
-          taskstatus:"进行中",
-          quantity:"1",
-          allbudget:"534.76"
-        },
-        {
-          date: "3",
-          number:"201901RW_3",
-          system: "海域探测监测系统",
-          content: "海域固定",
-          process:"土建",
-          taskstatus:"进行中",
-          quantity:"20",
-          allbudget:"3235.77"
-        },{
-          date: "4",
-          number:"201901RW_4",
-          system: "海域探测监测系统",
-          content: "深井台",
-          process:"设备购置",
-          taskstatus:"进行中",
-          quantity:"1",
-          allbudget:"3478.52"
-        }
+     
       ],
       tableData1:[{
           number:"201901RW_1",
-          name:"综合台",
-          remark:"海淀台",
-          process:"堪选、土建"
+          name:"小孔径台阵 --地震台阵",
+          remark:"海淀区",
+          process:"勘选",
+          statused:'editClose3'
       },
       {
           number:"201901RW_1",
-          name:"综合台",
-          remark:"朝阳台",
-          process:"征地、土建"
+          name:"小孔径台阵 --地震台阵",
+          remark:"朝阳区",
+          process:"征（租）地",
+          statused:'editClose31'
       },
       {
           number:"201901RW_1",
-          name:"综合台",
-          remark:"昌平台",
-          process:"前期工作咨询、工程设计"
+          name:"小孔径台阵 --地震台阵",
+          remark:"东城区",
+          process:"前期工作咨询",
+          statused:'editClose32'
       },
       {
           number:"201901RW_1",
-          name:"综合台",
-          remark:"顺义台",
-          process:"节能影响评估"
+          name:"小孔径台阵 --地震台阵",
+          remark:"西城区",
+          process:"节能影响评估",
+          statused:'editClose33'
       },
       {
           number:"201901RW_1",
-          name:"综合台",
-          remark:"大兴台",
-          process:"仪器架构"
+          name:"小孔径台阵 --地震台阵",
+          remark:"丰台区",
+          process:"工程设计",
+          statused:'editClose34'
       }
       ],
        list:[{
          key:'0',
-        label:'路基探测监测系统'
+        label:'陆基探测监测系统'
+      },{
+         key:'1',
+        label:'海域探测监测系统'
+      },{
+         key:'2',
+        label:'数据传输系统'
+      },{
+         key:'3',
+        label:'信息处理与服务系统'
+      },{
+         key:'4',
+        label:'运行管理保障系统'
       }
       ],
       item:'0',
       contents:[{
         key:'0',
-        label:'台阵'
+        label:'小孔径台阵'
       },
       {
         key:'1',
@@ -699,16 +805,17 @@ export default {
       },
       {
         key:'3',
-        label:'地磁'
+        label:'重力台'
       },{
         key:'4',
-        label:'重力'
+        label:'地磁台'
       },{
         key:'5',
-        label:'陆域机动探测'
+        label:'机动车组'
       }
       ],
       content:'0',
+       
       units:[{
         key:'0',
         label:'北京市地震局'
@@ -748,10 +855,129 @@ export default {
         label:'中国地震局第二监测中心'
       }
       ],
-      unit:'0'
+      unit:'请选择单位',
+        units1:[{
+        key:'0',
+        label:'北京市地震局',
+        
+      },
+      {
+        key:'1',
+        label:'天津市地震局',
+          
+      },
+      {
+        key:'2',
+        label:'河北省地震局',
+          
+      },
+      {
+        key:'3',
+        label:'山西省地震局',
+      
+      },{
+        key:'4',
+        label:'内蒙古自治区地震局',
+      
+      },{
+        key:'5',
+        label:'中国地震局地质研究院',
+      
+      },
+      {
+        key:'6',
+        label:'中国地震台网中心',
+        
+      },
+      {
+        key:'7',
+        label:'中国地震局地球物理勘探中心',
+   
+      },
+      {
+        key:'8',
+        label:'中国地震局第一监测中心',
+      
+      },
+      {
+        key:'9',
+        label:'中国地震局第二监测中心',
+       
+      }
+      ],
+       unit1:'0',
+       units2:[{
+        key:'0',
+        label:'北京市地震局',
+        
+      },
+      {
+        key:'1',
+        label:'天津市地震局',
+          
+      },
+      {
+        key:'2',
+        label:'河北省地震局',
+          
+      },
+      {
+        key:'3',
+        label:'山西省地震局',
+      
+      },{
+        key:'4',
+        label:'内蒙古自治区地震局',
+      
+      },{
+        key:'5',
+        label:'中国地震局地质研究院',
+      
+      },
+      {
+        key:'6',
+        label:'中国地震台网中心',
+        
+      },
+      {
+        key:'7',
+        label:'中国地震局地球物理勘探中心',
+   
+      },
+      {
+        key:'8',
+        label:'中国地震局第一监测中心',
+      
+      },
+      {
+        key:'9',
+        label:'中国地震局第二监测中心',
+       
+      }
+      ],
+       unit2:'0',
     };
   },
+
+ 
   methods: {
+    showTable(){
+      this.tableInfo=!this.tableInfo
+      if(this.iconType=='el-icon-arrow-down'){
+        this.iconType='el-icon-arrow-up'
+        return
+      }
+      if(this.iconType='el-icon-arrow-up'){
+        this.iconType='el-icon-arrow-down'
+      }
+    },
+   closeDialog(){
+     this.$refs.editClose.blur()
+     this.$refs.editClose1.blur()
+     this.$refs.editClose2.blur()
+     this.$refs['from'].resetFields();
+     
+   },
     backHome() {
       this.$router.push({ path: "/construction" });
     },
@@ -785,7 +1011,8 @@ export default {
       this.innerVisible = true;
     },
     edit() {
-      this.$router.push({ path: "/constructionDeatils" });
+      //this.$router.push({ path: "/constructionDeatils" });
+      this.taskVisible=true;
     },
     delConfirm() {
       this.$confirm("确认删除吗?", "提示", {
@@ -830,17 +1057,32 @@ export default {
 
         this.innerVisible = true;
       }
-    }
+    },
+    // closeOutside(){
+    //   console.log('22222222222222222222222222222222222');
+    //   // document.getElementsByClassName("el-select-dropdown")[2].hidden = true
+    // }
   }
 };
 </script>
 
 <style rel="stylesheet/scss" lang="scss" >
+.updateShow{
+  overflow: hidden;
+  
+}
+.borderNone{
+  input{
+  border: 0px;
+  outline:none;
+  }
+  
+}
 .container {
   .table {
     width: 100%;
     border-radius: 20px;
-
+    margin-top:1px; 
     span {
       display: block;
       height: 40px;
@@ -919,13 +1161,12 @@ export default {
   .update {
     background: #29c7ca;
     color: #fff;
-
+      //font-size: 15px;
     border-radius: 10px;
   }
   .del {
-    background: #f5af50;
+    background: #f5af50!important;
     color: #fff;
-
     border-radius: 10px;
   }
   .cancel {
@@ -934,13 +1175,54 @@ export default {
     border-radius: 10px;
   }
   .batchDel {
-    background: #eb6c5c;
+    background: #eb6c5c!important;
     color: #fff;
-
     border-radius: 10px;
   }
   .el-dialog {
     border-radius: 15px;
   }
+  
+ 
 }
+.container .table tr td {
+    border: 1px solid #ccc!important;
+
+    display: table-cell;
+    vertical-align: inherit;
+ 
+    padding: 0;
+    input{
+      height: 40px;
+    line-height: 40px;
+    width: 100%;
+ 
+    outline: none;
+    }
+}
+#sex{
+  width: 300px;
+  height: 40px;
+  padding-left:20px;
+  border-radius:10px;
+  margin-left: 40px;
+  outline: none;
+  appearance:none;
+  .focc{
+    height: 20px;
+    -moz-appearance:none; /* Firefox */
+    -webkit-appearance:none; /* Safari 和 Chrome */
+    appearance:none;
+    outline: none;
+    &:hover{
+    color:#ffffff;
+    background-color:#ffffff;
+    outline: none;
+    border: 0;
+    }
+  }
+}
+
+
+
 </style>

@@ -23,12 +23,12 @@
           <el-table-column label="序号" width="70" align="center">
             <template slot-scope="scope">{{ scope.row.date }}</template>
           </el-table-column>
-          <el-table-column prop="name" label="过程名称" width="120" align="center"></el-table-column>
+          <el-table-column prop="name" label="过程名称" width="200" align="center"></el-table-column>
           <el-table-column prop="sort" label="排序" show-overflow-tooltip width="100" align="center"></el-table-column>
           <el-table-column prop="remark" label="备注" align="center"></el-table-column>
           <el-table-column label="操作" width="250" align="center">
             <template slot-scope="scope">
-              <el-button class="update" size="small" @click="edit()">修改</el-button>
+              <el-button class="update" size="small" @click="edit(scope.$index, scope.row)">修改</el-button>
               <el-button class="batchDel" size="small" @click="delConfirm()">删除</el-button>
             </template>
           </el-table-column>
@@ -46,9 +46,13 @@
       <!-- 内部操作 -->
       <el-form ref="form" label-width="140px">
         <el-form-item label="过程名称：">
-          <el-select placeholder="请选择" style="width:100%">
+          <!-- <el-select placeholder="请选择" style="width:100%">
             <el-option v-for="item in choose" :key="item.id" :label="item.name" :value="item.id"></el-option>
-          </el-select>
+          </el-select> -->
+          <!-- <el-text placeholder="请选择" style="width:100%">
+            
+          </el-text> -->
+           <el-input placeholder="请输入" style="width:100%"></el-input>
         </el-form-item>
         <el-form-item label="排序：">
           <el-input></el-input>
@@ -76,10 +80,10 @@
       <!-- 内部操作 -->
       <el-form ref="form" label-width="140px">
         <el-form-item label="过程名称：">
-          <el-input value="堪选"></el-input>
+          <el-input v-model="str1"></el-input>
         </el-form-item>
         <el-form-item label="排序：">
-          <el-input value="1"></el-input>
+          <el-input v-model="str2"></el-input>
         </el-form-item>
         <el-form-item label="备注：">
           <el-input></el-input>
@@ -116,43 +120,43 @@ export default {
       choose: [
         {
           id: "0",
-          name: "堪选"
+          name: "勘选"
         },
         {
           id: "1",
-          name: "征地"
+          name: "征（租）地"
         },
         {
           id: "2",
-          name: "土建"
-        },
-        {
-          id: "3",
-          name: "试运行"
-        },
-        {
-          id: "4",
-          name: "验收"
-        },
-        {
-          id: "5",
-          name: "设备购置"
-        },
-        {
-          id: "6",
-          name: "仪器架设"
-        },
-        {
-          id: "7",
           name: "前期工作咨询"
         },
         {
-          id: "8",
+          id: "3",
+          name: "节能影响评估"
+        },
+        {
+          id: "4",
           name: "工程设计"
         },
         {
+          id: "5",
+          name: "土建"
+        },
+        {
+          id: "6",
+          name: "设备购置"
+        },
+        {
+          id: "7",
+          name: "仪器架设"
+        },
+        {
+          id: "8",
+          name: "试运行"
+        },
+        {
           id: "9",
-          name: "节能影响评估"
+          name: "验收"
         },
         {
           id: "10",
@@ -236,64 +240,66 @@ export default {
       innerVisible: false,
       isEdit: false, // 修改弹出层
       tips: "",
+      str1:'',
+      str2:'',
       tableData: [
         {
           date: "1",
-          name: "堪选",
+          name: "勘选",
           sort: "1",
           remark:""
         },
         {
           date: "2",
-          name: "征地",
+          name: "征（租）地",
           sort: "2",
           remark:""
         },
         {
           date: "3",
-          name: "土建",
+          name: "前期工作咨询",
           sort: "3",
           remark:""
         },
         {
           date: "4",
-          name: "试运行",
+          name: "节能影响评估",
           sort: "4",
           remark:""
         },
         {
           date: "5",
-          name: "验收",
+          name: "工程设计",
           sort: "5",
           remark:""
         },
         {
           date: "6",
-          name: "设备购置",
+          name: "土建",
           sort: "6",
           remark:""
         },
         {
           date: "7",
-          name: "仪器架设",
+          name: "设备购置",
           sort: "7",
           remark:""
         },
         {
           date: "8",
-          name: "前期工作咨询",
+          name: "仪器架设",
           sort: "8",
           remark:""
         },
         {
           date: "9",
-          name: "工程设计",
+          name: "试运行",
           sort: "9",
           remark:""
         },
         {
           date: "10",
-          name: "节能影响评估",
+          name: "验收",
           sort: "10",
           remark:""
         }
@@ -314,8 +320,12 @@ export default {
       this.isEdit = false;
       this.innerVisible = true;
     },
-    edit() {
+    edit(index,row) {
       this.isEdit = true;
+      this.str1='';
+      this.str1=row.name;
+      this.str2='';
+      this.str2=row.sort
     },
     delConfirm() {
       this.$confirm("确认删除吗?", "提示", {

@@ -14,8 +14,8 @@
         </div>
 
         <el-table :data="tableData" border style="width: 100%">
-          <el-table-column prop="date" label="编号" width="70" align="center"></el-table-column>
-          <el-table-column prop="name" label="角色名称" width="180" align="center"></el-table-column>
+          <el-table-column prop="date" label="编号" width="100" align="center"></el-table-column>
+          <el-table-column prop="name" label="角色名称" width="250" align="center"></el-table-column>
 
           <el-table-column label="备注" align="center"></el-table-column>
           <el-table-column label="操作" width="260" align="center">
@@ -75,7 +75,7 @@
     </el-dialog>
 
     <!-- 权限展示模态框 -->
-    <el-dialog title="菜单权限" :visible.sync="isAuth" width="30%" :before-close="handleClose">
+    <el-dialog title="菜单权限" :visible.sync="isAuth" width="25%" :before-close="handleClose">
       <el-tree :data="data2" show-checkbox node-key="id"></el-tree>
       <span slot="footer" class="dialog-footer">
         <el-button @click="authSave()" class="add" size="small">保存</el-button>
@@ -134,57 +134,78 @@ export default {
       data2: [
         {
           id: 1,
-          label: "数据管理系统",
+          label: "项目管理",
           children: [
             {
-              id: 3,
+              id: 6,
               label: "建设任务"
             },
             {
-              id: 4,
-              label: "建设过程"
-            },
-            {
-              id: 5,
-              label: "参与角色"
-            },
-            {
-              id: 6,
-              label: "参与单位"
-            },
-            {
               id: 7,
-              label: "参与人员"
+              label: "建设过程"
             },
             {
               id: 8,
               label: "建设项目"
-            },
-            {
-              id: 9,
-              label: "知识库管理"
-            },
-            {
-              id: 10,
-              label: "合同管理"
-            }    ]
+            }
+               ]
         },
         {
           id: 2,
-          label: "业务管理系统",
+          label: "业务管理",
           children: [
             {
-              id: 11,
+              id: 9,
               label: "业务管理"
-            },
+            }
+          ]
+        },
+        {
+          id: 3,
+          label: "统计管理",
+          children: [
             {
-              id: 12,
+              id: 10,
               label: "财务明细统计"
             },
             {
-              id: 13,
+              id: 11,
               label: "分项目进度统计"
             }
+          ]
+        },
+         {
+          id: 4,
+          label: "资料管理",
+          children: [
+            {
+              id: 12,
+              label: "知识库管理"
+            },
+            {
+              id: 13,
+              label: "合同管理"
+            }
+           
+          ]
+        },
+         {
+          id: 5,
+          label: "权限管理",
+          children: [
+            {
+              id: 14,
+              label: "参与单位"
+            },
+            {
+              id: 15,
+              label: "参与人员"
+            },
+              {
+              id: 16,
+              label: "参与角色"
+            }
+           
           ]
         }
       ]

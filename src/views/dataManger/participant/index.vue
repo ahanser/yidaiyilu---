@@ -30,7 +30,7 @@
           <el-table-column prop="department" label="所属单位" align="center"></el-table-column>
 
           <el-table-column prop="role" label="角色" align="center" show-overflow-tooltip></el-table-column>
-          <el-table-column label="操作" width="250" align="center">
+          <el-table-column label="操作" width="350" align="center">
             <template slot-scope="scope">
               <el-button class="update" size="small" @click="edit()">修改</el-button>
               <el-button class="batchDel" size="small" @click="delConfirm()">删除</el-button>
@@ -47,7 +47,7 @@
 
     <!-- 新增弹出层样式
     -->
-    <el-dialog title="新建人员数据" :visible.sync="outerVisible" width="40%">
+    <el-dialog title="新建人员数据" :visible.sync="outerVisible" width="40%" @close='closeselect'>
       <!-- 内部操作 -->
       <el-form ref="form" label-width="140px">
         <el-form-item label="用户名：">
@@ -60,7 +60,7 @@
           <el-input></el-input>
         </el-form-item>
         <el-form-item label="是否初始化密码：">
-          <el-select placeholder="请选择" style="width:100%">
+          <el-select placeholder="请选择" style="width:100%" v-model="item" ref="closePass">
             <el-option v-for="item in choose" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
@@ -78,7 +78,7 @@
     <!-- 修改 -->
 
     <el-dialog title="修改人员数据" :visible.sync="isEdit
-    " width="40%">
+    " width="40%" @close='closeselect'>
       <!-- 内部操作 -->
       <el-form ref="form" label-width="140px">
          <el-form-item label="用户名：">
@@ -94,7 +94,10 @@
           <el-input value="13673090911"></el-input>
         </el-form-item>
         <el-form-item label="角色：">
-          <el-input value="法人单位管理员"></el-input>
+          <el-select v-model="unit" style="width:100%" ref="person">
+            <el-option v-for="unit in units" :key="unit.key" :label="unit.label"
+                       :value="unit.key"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
 
@@ -125,6 +128,25 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+       units:[{
+        key:'0',
+        label:'法人单位管理员'
+      },
+      {
+        key:'1',
+        label:'法人单位领导'
+      },
+      {
+        key:'2',
+        label:'建设单位管理员'
+      },
+      {
+        key:'3',
+        label:'建设单位领导'
+      }
+        
+      ],
+      unit:'0',
       choose: [
         {
           id: "1",
@@ -135,6 +157,7 @@ export default {
           name: "否"
         }
       ],
+      item:'1',
       multipleSelection: [],
       options: [
         {
@@ -193,33 +216,37 @@ export default {
           date: "1",
           name: "王安",
           username: "18826258535",
-          department:"北京市地震局",
+          department:"中国地震局地震研究院",
           role:"法人单位领导"
         },
         {
           date: "2",
           name: "李欣",
           username: "13572585967",
-          department:"河北省地震局",
+          department:"中国地震局地震研究院",
           role:"法人单位管理员"
         },
         {
           date: "3",
-          name: "鬲常伟",
+          name: "常伟",
           username: "18092133874",
-          department:"中国地震台网中心",
+          department:"北京市地震局",
           role:"建设单位领导"
         },{
           date: "4",
-          name: "刘欣瑞",
+          name: "刘瑞",
           username: "18852418516",
-          department:"中国地震局第一监测中心",
+          department:"北京市地震局",
           role:"建设单位管理员"
         }
       ]
     };
   },
   methods: {
+    closeselect(){
+        this.$refs.person.blur();
+        this.$refs.closePass.blur()
+    },
     add() {
       this.outerVisible = true;
     },
@@ -350,9 +377,8 @@ export default {
     border-radius: 10px;
   }
   .del {
-    background: #f5af50;
+    background: #f5b350;
     color: #fff;
-
     border-radius: 10px;
   }
   .cancel {

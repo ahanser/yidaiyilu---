@@ -1,12 +1,14 @@
 <template>
   <div class="container">
     <div class="content">
+      <div class="moreInfoDetail">
       <h2>
-        <i class="el-icon-back" style="cursor:pointer" @click="backHome()"></i> 项目名称：一带一路
+        <!-- <i class="el-icon-back" style="cursor:pointer" @click="backHome()"></i>  -->
+        <el-button type="primary" size="medium" @click="backHome()" style="margin-right:20px" round>返回</el-button>项目名称：一带一路
       </h2>
       <div>
         <el-table :data="tableData" border style="width: 80%">
-          <el-table-column prop="number" label="任务编号" width="100" align="center"></el-table-column>
+          <el-table-column prop="number" label="任务编号" width="180" align="center"></el-table-column>
           <el-table-column prop="system" label="任务所属系统" width="180" align="center"></el-table-column>
           <el-table-column prop="content" label="建设内容" align="center"></el-table-column>
           <el-table-column prop="process" label="任务过程" align="center"></el-table-column>
@@ -28,6 +30,7 @@
           <el-table-column prop="budget3" label="预算金额（万元）" align="center"></el-table-column>
         </el-table>
       </div>
+      </div>
     </div>
   </div>
 </template>
@@ -41,63 +44,46 @@ export default {
       tableData: [
         {
           number: "201901RW_1",
-          system: "路基探测监测系统",
-          content:"综合台",
-          process:"征地",
+          system: "陆基探测监测系统",
+          content:"小孔径台阵 --地震台阵",
+          process:"勘选",
           taskstatus:"进行中",
-          quantity:"26",
-          allbudget:"12725.16"
+          quantity:"5",
+          allbudget:"9629"
         }
       ],
        tableData2: [
         {
-          process:"堪选",
+          process:"勘选",
           budget:"1114",
-          process2:"征地",
+          process2:"征（租）地",
           budget2:"4",
+          process3:"前期工作咨询",
+          budget3:"248",
+        },
+         {
+          process:"节能影响评估",
+          budget:"67",
+          process2:"工程设计",
+          budget2:"6277",
           process3:"土建",
-          budget3:"22"
+          budget3:"22",
+         
         },
          {
-          process:"改造",
-          budget:"43",
-          process2:"试运行",
-          budget2:"1801",
-          process3:"工程设计费",
-          budget3:"6277"
+          process:"设备购置",
+          budget:"11",
+          process2:"仪器架设",
+          budget2:"20",
+          process3:"试运行",
+          budget3:"1801",  
         },
          {
-          process:"前期工程咨询费",
-          budget:"248",
-          process2:"工程监理费",
-          budget2:"356",
-          process3:"节能影响评估费",
-          budget3:"67"
-        },
-         {
-          process:"管理费",
-          budget:"4",
-          process2:"安全测评",
-          budget2:"30",
-          process3:"建设工程费",
-          budget3:"7630"
-        },
-         {
-          process:"培训费",
-          budget:"1208",
-          process2:"基本预备费",
-          budget2:"8380",
-          process3:"建设其他费",
-          budget3:"403"
-        },
-        {
           process:"验收",
           budget:"65",
-          process2:"设备购置",
-          budget2:"11",
-          process3:"仪器架设",
-          budget3:"20"
-        }
+        },
+        
+      
       ]
     };
   },
@@ -208,6 +194,9 @@ export default {
   }
   .el-dialog {
     border-radius: 15px;
+  }
+  .el-icon-back{
+    font-size: 30px;
   }
 }
 </style>

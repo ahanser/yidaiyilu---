@@ -2,14 +2,14 @@
   <div class="wrapper">
     <el-header height="80px" style="background:#242c44">
       <el-row type="flex" class="row-bg" justify="space-between">
-        <el-col :span="12">
+        <el-col :span="10">
           <div class="title">
             <div>一带一路地震监测台网项目管理平台</div>
             <h5>A project management platform for seismis moonitoring network</h5>
           </div>
         </el-col>
-        <el-col :span="8" id="navList">
-          <span v-for="(item,index)   in  nav" :key="index" @click="goNav(item)">{{item.name}}</span>
+        <el-col :span="12" id="navList">
+          <span v-for="(item,index) in nav" :key="index" @click="goNav(item,index)" :class="{'active': activeIndex === index}"><i :class="item.icon"></i>{{item.name}}</span>
         </el-col>
         <el-col :span="4">
           <img
@@ -17,16 +17,17 @@
             alt
             style="width:30px;position:relative; top:10px;cursor:pointer;margin-right:20px"
             @click="showInfor()"
+            v-show="users=='李欣'?false:(users=='刘瑞'?false:true)"
           >
 
           <el-dropdown>
             <span class="el-dropdown-link">
-              {{ originName}}：{{ users}}
+              {{originName}}：{{users}}
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
-            <el-dropdown-menu slot="dropdown" style="z-index:2300">
-              <el-dropdown-item>首页</el-dropdown-item>
-              <el-dropdown-item @click.native="go()">退出</el-dropdown-item>
+            <el-dropdown-menu slot="dropdown" style="z-index:2300; margin-top:-30px" class="iconShow">
+             
+              <el-dropdown-item @click.native.prevent="go"  @keyup.Escape="go">退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
@@ -37,10 +38,32 @@
 <script>
 export default {
   name: 'app',
-
+      created:function(){
+			// 主页添加键盘事件,注意,不能直接在焦点事件上添加回车
+			var that=this;
+			document.onkeydown=function(e){
+				var key=window.event.keyCode;
+				if(key==27){
+					that.go();
+				}
+			}
+  },
   data() {
     return {
-      dialogTableVisible: false
+      dialogTableVisible: false,
+      activeIndex: 0
+    }
+  },
+  
+  watch:{
+    nav(){
+        
+   
+           
+        //this.$router.push(this.nav[0].path)
+        this.$store.state.user.sibarArr = this.nav[0].child
+      
+   
     }
   },
   computed: {
@@ -48,14 +71,25 @@ export default {
       let user = JSON.parse(window.sessionStorage.getItem('userInfor')).username
       return user
     },
+ 
+
     originName() {
-      let user = JSON.parse(window.sessionStorage.getItem('userInfor')).username
-      let origin = ''
+      let user = JSON.parse(window.sessionStorage.getItem('userInfor')).username;
+      let origin = '';
       if (user == '李欣') {
         origin = '法人单位管理员'
       }
       if (user == '王安') {
         origin = '法人单位领导 '
+      }
+      if(user =='刘瑞'){
+        origin = '建设单位管理员'
+      }
+       if(user =='常伟'){
+        origin = '建设单位领导'
+      }
+      if(user =='admin'){
+         origin = '系统管理员'
       }
       return origin
     },
@@ -64,6 +98,7 @@ export default {
     }
   },
   methods: {
+  
     go() {
       // alert(1);
       window.sessionStorage.clear()
@@ -73,10 +108,19 @@ export default {
       // console.log( this.$store.state.app )
       this.$store.state.app.tips = true
     },
-    goNav(item) {
-      this.$store.state.user.sibarArr = item.child
-      this.$router.push(item.path)
-    }
+    goNav(item,index) {
+      //  alert(1)
+     let that =this
+      // console.log(item.child)
+     this.$store.state.user.sibarArr = item.child;
+     setTimeout(function(){
+        that.$router.push(item.path);
+     },500)
+    
+     
+     this.activeIndex = index;
+    },
+   
   }
 }
 </script>
@@ -88,15 +132,26 @@ export default {
       display: inline-block;
       height: 78px;
       line-height: 78px;
-      margin: 0 10px;
-    }
-    span:hover {
-      cursor: pointer;
+      margin: 0px 40px;
+      position: relative;
+      i{
+        margin-right:5px; 
+      }
+      &:hover{
+        cursor: pointer;
+      }
     }
   }
-  .v-modal {
+ .active
+{
+  color:rgb(255, 208, 75)!important;
+  border-bottom: 2px solid rgb(255, 208, 75);
+  // background-color: black;
+  
+}  .v-modal {
     //display: none;
     background: transparent !important;
+
   }
   .el-dropdown {
     height: 80px;
@@ -169,6 +224,9 @@ export default {
       margin: 0;
       width: 200px;
     }
+  }
+  #dropdown-menu-6328{
+    background-color: #ff3040;
   }
 }
 </style>

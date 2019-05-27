@@ -16,7 +16,8 @@ const user = {
     avatar: '',
     roles: [],
     menuArr: [],
-    sibarArr: []
+    sibarArr: [],
+    defaultPath:''
   },
 
   mutations: {

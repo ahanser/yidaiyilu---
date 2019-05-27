@@ -5,9 +5,16 @@
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"/>
     <sidebar class="sidebar-container"/>
     <div class="main-container">
+   
       <navbar/>
+          <div class="fullScreen" v-show="this.$route.path=='/'?true:false">
+            <img src="../../../static/homePage.png" alt="">
+          </div>
+         
       <app-main/>
+  
        <inforTips/>
+      
     </div>
   </div>
 </template>
@@ -18,6 +25,7 @@ import ResizeMixin from "./mixin/ResizeHandler";
 
 export default {
   name: "Layout",
+
   components: {
     Navbar,
     Sidebar,
@@ -40,13 +48,17 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === "mobile"
       };
-    }
+    },
+   
   },
   methods: {
     handleClickOutside() {
       this.$store.dispatch("CloseSideBar", { withoutAnimation: false });
     }
-  }
+  },
+
+
+ 
 };
 </script>
 
@@ -57,6 +69,7 @@ export default {
   position: relative;
   height: 100%;
   width: 100%;
+  //overflow: hidden;
   &.mobile.openSidebar {
     position: fixed;
     top: 0;
@@ -71,4 +84,13 @@ export default {
   position: absolute;
   z-index: 999;
 }
+ .fullScreen{
+      width: 87%;
+      height: 807px;
+    img{
+    width: 116%;
+    height: 100%;
+    display: block;
+    }
+  }
 </style>

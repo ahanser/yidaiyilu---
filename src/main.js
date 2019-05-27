@@ -12,8 +12,12 @@ import App from './App'
 import store from './store'
 import router from './router'
 
+
+
+
 import '@/icons' // icon
 import '@/permission' // permission control
+
 
 /**
  * This project originally used easy-mock to simulate data,
@@ -25,15 +29,40 @@ import '@/permission' // permission control
  */
 // import '../mock' // simulation data
 
+//屏幕适配
+// var devInnerHeight = 1080.0 // 开发时的InnerHeight
+// var devDevicePixelRatio = 1.0// 开发时的devicepixelratio
+// var devScaleFactor = 1.3 // 开发时的ScaleFactor
+// var scaleFactor = require('electron').screen.getPrimaryDisplay().scaleFactor
+// var zoomFactor = (window.innerHeight / devInnerHeight) * (window.devicePixelRatio / devDevicePixelRatio) * (devScaleFactor / scaleFactor)
+// require('electron').webFrame.setZoomFactor(zoomFactor)
+
+
 Vue.use(ElementUI, {
   locale
+})
+Vue.directive('click-outside', {
+  bind: function (el, binding, vnode) {
+    el.clickOutsideEvent = function (event) {
+      // here I check that click was outside the el and his childrens
+      if (!(el == event.target || el.contains(event.target))) {
+        // and if it did, call method provided in attribute value
+        vnode.context[binding.expression](event)
+      }
+    }
+    document.body.addEventListener('click', el.clickOutsideEvent)
+  },
+  unbind: function (el) {
+    document.body.removeEventListener('click', el.clickOutsideEvent)
+  }
 })
 
 Vue.config.productionTip = false
 
-new Vue({
+var vm=new Vue({
   el: '#app',
   router,
   store,
   render: h => h(App)
 })
+window.Vue = vm

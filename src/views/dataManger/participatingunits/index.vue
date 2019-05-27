@@ -32,7 +32,7 @@
           <el-table-column prop="mobilephone" label="手机号" align="center" show-overflow-tooltip></el-table-column>
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
-              <el-button class="update" size="small" @click="edit()">修改</el-button>
+              <el-button class="update" size="small" @click="edit(scope.$index, scope.row)">修改</el-button>
               <el-button class="batchDel" size="small" @click="delConfirm()">删除</el-button>
             </template>
           </el-table-column>
@@ -46,7 +46,7 @@
 
     <!-- 新增弹出层样式
     -->
-    <el-dialog title="新建单位" :visible.sync="outerVisible" width="40%">
+    <el-dialog title="新建单位" :visible.sync="outerVisible" width="40%" @close='closeDialog'>
       <!-- 内部操作 -->
       <el-form ref="form" label-width="100px">
         <el-form-item label="单位名称：">
@@ -54,11 +54,12 @@
         </el-form-item>
         <el-form-item label="所在地：">
           <el-cascader
+          
+            clearable
             style="width:100%"
             placeholder="请选择所在地"
             :options="options"
-            filterable
-            change-on-select
+            ref="selectiond"
           ></el-cascader>
         </el-form-item>
         <el-form-item label="负责人：">
@@ -85,19 +86,19 @@
       <!-- 内部操作 -->
       <el-form ref="form" label-width="100px">
         <el-form-item label="单位名称：">
-          <el-input value="北京市地震局"></el-input>
+          <el-input v-model="name1"></el-input>
         </el-form-item>
         <el-form-item label="所在地：">
-          <el-input value="北京"></el-input>
+          <el-input  v-model="address1"></el-input>
         </el-form-item>
         <el-form-item label="负责人：">
-          <el-input value="鬲常伟"></el-input>
+          <el-input  v-model="leading1"></el-input>
         </el-form-item>
         <el-form-item label="联系电话：">
-          <el-input value="010-82608491"></el-input>
+          <el-input  v-model="telephone1"></el-input>
         </el-form-item>
         <el-form-item label="手机号：">
-          <el-input value="13585748596"></el-input>
+          <el-input v-model="mobilephone1"></el-input>
         </el-form-item>
       </el-form>
 
@@ -181,20 +182,25 @@ export default {
       innerVisible: false,
       isEdit: false, // 修改弹出层
       tips: '',
+      name1: '',
+      address1: '',
+      leading1: '',
+      telephone1: '',
+      mobilephone1: '',
       tableData: [
         {
           date: '1',
           name: '北京地震局',
           address: '北京',
-          leading: '鬲常伟',
+          leading: '常伟',
           telephone: '010-82608491',
           mobilephone: '13585748596'
         },
         {
           date: '2',
-          name: '天津市地震局',
-          address: '天津',
-          leading: '骆伟静',
+          name: '重庆地震局',
+          address: '北京',
+          leading: '刘梓瑞',
           telephone: '022-28354131',
           mobilephone: '18852411236'
         },
@@ -202,7 +208,7 @@ export default {
           date: '3',
           name: '河北省地震局',
           address: '河北',
-          leading: '李欣',
+          leading: '李瑞',
           telephone: '0311-85888842',
           mobilephone: '18945446766'
         },
@@ -226,15 +232,15 @@ export default {
           date: '6',
           name: '中国地震局地震研究院',
           address: '北京',
-          leading: '张浩',
+          leading: '李欣',
           telephone: '010-62009003',
           mobilephone: '13485748877'
         },
         {
           date: '7',
-          name: '中国地震台网中心',
+          name: '中国地震局地震研究院',
           address: '北京',
-          leading: '王安迪',
+          leading: '王安',
           telephone: '010-59959440',
           mobilephone: '13955668899'
         },
@@ -266,6 +272,9 @@ export default {
     }
   },
   methods: {
+    closeDialog(){
+      this.$refs.selectiond.click()
+    },
     add() {
       this.outerVisible = true
     },
@@ -279,8 +288,18 @@ export default {
       this.isEdit = false
       this.innerVisible = true
     },
-    edit() {
+    edit(index,row) {
       this.isEdit = true
+      this.name1= '',
+      this.address1= '',
+      this.leading1= '',
+      this.telephone1= '',
+      this.mobilephone1= '',
+      this.name1=row.name;
+      this.address1=row.address
+      this.leading1=row.leading
+      this.telephone1=row.telephone
+      this.mobilephone1=row.mobilephone
     },
     delConfirm() {
       this.$confirm('确认删除吗?', '提示', {
@@ -317,7 +336,7 @@ export default {
     // 批量删除
     batchDel() {
       if (this.multipleSelection.length == 0) {
-        this.tips = '请选择！'
+        this.tips = '请选择'
 
         this.innerVisible = true
       } else {

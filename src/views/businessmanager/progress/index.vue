@@ -3,6 +3,20 @@
     <div class="content">
       {{width}}
       <el-row>
+
+         <div class="header">
+             
+              <el-select  v-model="item" placeholder="请选择" size="mini" style="float:right;margin-left:10px">
+                       <el-option v-for="item in list" :key="item.key" :label="item.label"
+                       :value="item.key"></el-option>
+              </el-select>
+              <el-select  v-model="child" placeholder="请选择" size="mini" style="float:right;" v-if="users=='常伟'?false:(users=='刘瑞'?false:true)">
+                       <el-option v-for="child in tableData" :key="child.key" :label="child.label"
+                       :value="child.key"></el-option>
+              </el-select>
+            </div>
+      </el-row>
+      <el-row>
         <el-col :span="10">
           <div class="item">
             <div class="header">系统进度</div>
@@ -13,35 +27,11 @@
         </el-col>
         <el-col :span="14">
           <div class="item">
-            <!-- <div class="header">
+            <div class="header">
               <span>各系统建设情况</span>
-              <el-select placeholder="请选择" size="mini" style="float:right">
-                <el-option></el-option>
-              </el-select>
-            </div> -->
+            </div>
             <div>
-              <div class="title">
-                <div>
-                  <span>台阵</span>
-                  <span>23</span>
-                </div>
-                <div>
-                  <span>综合台</span>
-                  <span>5</span>
-                </div>
-                <div>
-                  <span>科学台阵</span>
-                  <span>51</span>
-                </div>
-                <div>
-                  <span>地磁</span>
-                  <span>51</span>
-                </div>
-                <div>
-                  <span>重力</span>
-                  <span>12</span>
-                </div>
-              </div>
+           
               <div id="main1" style="height:300px;"></div>
             </div>
           </div>
@@ -59,14 +49,11 @@
         <el-col :span="10">
           <div class="item">
             <div class="header">
-              <span>各任务完成度(单位：万元)</span>
-              <el-select v-model="item" placeholder="请选择" size="mini" style="float:right">
-                 <el-option v-for="item in list" :key="item.key" :label="item.label"
-                       :value="item.key"></el-option>
-              </el-select>
+              <span>各任务完成度</span>
+      
             </div>
             <div>
-              <div id="main3" style="height:300px;"></div>
+              <div id="main3" style="height:300px; color:white"></div>
             </div>
           </div>
         </el-col>
@@ -85,7 +72,12 @@ export default {
     this.init3();
     this.init4();
   },
-  computed: {},
+  computed: {
+     users() {
+      let user = JSON.parse(window.sessionStorage.getItem('userInfor')).username
+      return user
+    },
+  },
   watch: {},
   data() {
     return {
@@ -95,43 +87,58 @@ export default {
       chart3: null,
        list:[{
          key:'0',
-        label:'综合台'
+        label:'陆基探测监测系统'
       },{
          key:'1',
-        label:'科学台阵'
+        label:'海域探测监测系统'
       },{
          key:'2',
-        label:'地磁'
-      },{
-         key:'3',
-        label:'重力'
-      },{
-         key:'4',
-        label:'陆域机动探测'
-      },{
-         key:'5',
-        label:'海域固定'
-      },{
-         key:'6',
-        label:'岛礁台'
-      },{
-         key:'7',
-        label:'深井台'
-      },{
-         key:'8',
-        label:'科考船'
-      },{
-         key:'9',
         label:'数据传输系统'
       },{
-         key:'10',
+         key:'3',
         label:'信息处理与服务系统'
       },{
-         key:'11',
+         key:'4',
         label:'运行管理保障系统'
       }
       ],
-      item:'0'
+      item:'0',
+      tableData:[
+        {
+          key: "0",
+          label: "北京地震局"
+        },
+        {
+          key: "1",
+          label: "重庆地震局"
+        },
+        {
+          key: "2",
+          label: "河北省地震局"
+        },
+        {
+          key: "3",
+          label: "山西省地震局"
+        },
+        {
+          key: "4",
+          label: "内蒙古自治区地震局"
+        },
+         {
+          key: "5",
+          label: "中国地震局地震研究院"
+        },
+         {
+          key: "6",
+          label: "中国地震局地球物理勘探中心"
+        },
+         {
+          key: "7",
+          label: "中国地震局第一监测中心"
+        }
+      ],
+      child:"0"
+ 
     };
   },
   methods: {
@@ -141,11 +148,11 @@ export default {
 
       //初始化数据
       var category = [
-        "路基检测系统",
-        "海域检测系统",
+       "陆基探测监测系统",
+        "海域探测监测系统",
         "数据传输系统",
-        "信息管理系统",
-        "运行检测系统"
+        "信息处理与服务系统",
+        "运行管理保障系统"
       ];
       var barData = [3100, 2142, 1218, 581, 431];
 
@@ -238,18 +245,28 @@ export default {
       let option = {
         tooltip: {
           trigger: "axis",
+          // formatter: "{a} <br/>{b} : {c}%",
           axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
+          //坐标轴指示器，坐标轴触发有效
+          type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
           }
         },
-        color: ["#ff6997", "#4abcfb", "#7a8abe"],
+        color: ["#ff6997", "#4abcfb", "#7a8abe",'#00FFFF','#00BFFF','#FF8247','#FF3030','#FA8072',"#8C8C8C","#00C5CD"],
         grid: {
           left: "3%",
           right: "4%",
           bottom: "3%",
           containLabel: true
         },
+         legend: {
+              
+        data:[{name:'勘选',
+        textStyle:{color:"white"}
+        },{name:'征（租）地', textStyle:{color:"white"}},{name:'前期工作咨询',textStyle:{color:"white"}},
+        {name:'节能影响评估',textStyle:{color:"white"}},{name:'工程设计',textStyle:{color:"white"}},{name:'土建',textStyle:{color:"white"}},
+        {name:'设备购置',textStyle:{color:"white"}},{name:'仪器架设',textStyle:{color:"white"}},
+        {name:'试运行',textStyle:{color:"white"}},{name:'验收',textStyle:{color:"white"}}]
+          },
         xAxis: {
           type: "value",
           axisLine: {
@@ -257,12 +274,17 @@ export default {
               type: "solid",
               color: "#939aab", //左边线的颜色
               width: "2" //坐标线的宽度
+            },
+         
+            
+          },
+           axisLabel: {
+                formatter: '{value} %'
             }
-          }
         },
         yAxis: {
           type: "category",
-          data: ["重力", "地磁", "科学台阵", "综合台", "台阵"],
+          data: ["机动车组(12)","重力台(12)", "地磁台(51)", "科学台阵(51)", "综合台(5)", "小孔径台阵(23)"],
           axisLine: {
             lineStyle: {
               type: "solid",
@@ -273,13 +295,13 @@ export default {
         },
         series: [
           {
-            name: "已完成",
+            name: "勘选",
             type: "bar",
             stack: "总量",
             label: {
               normal: {
                 show: true,
-                position: "insideRight"
+                position: "inside"
               }
             },
             lineStyle: {
@@ -292,16 +314,38 @@ export default {
                 barBorderRadius: 7
               }
             },
-            data: [320, 302, 301, 400, 500]
+            data: [5, 10, 12, 9, 8,13]
           },
-          {
-            name: "建设中",
+           {
+            name: "征（租）地",
             type: "bar",
             stack: "总量",
             label: {
               normal: {
                 show: true,
-                position: "insideRight"
+                position: "inside"
+              }
+            },
+            lineStyle: {
+              normal: {
+                color: "#ff6997"
+              }
+            },
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: 7
+              }
+            },
+            data: [15, 10 ,8, 11, 12, 15]
+          },
+          {
+            name: "前期工作咨询",
+            type: "bar",
+            stack: "总量",
+            label: {
+              normal: {
+                show: true,
+                position: "inside"
               }
             },
             lineStyle: {
@@ -314,16 +358,16 @@ export default {
                 barBorderRadius: 7
               }
             },
-            data: [120, 132, 101, 700, 800]
+            data: [12 ,13, 6, 11, 7, 10]
           },
           {
-            name: "未完成",
+            name: "节能影响评估",
             type: "bar",
             stack: "总量",
             label: {
               normal: {
                 show: true,
-                position: "insideRight"
+                position: "inside"
               }
             },
             lineStyle: {
@@ -336,8 +380,142 @@ export default {
                 barBorderRadius: 7
               }
             },
-            data: [220, 182, 191, 800, 600]
+            data: [8, 7, 14, 9, 13, 10]
+          },
+          {
+            name: "工程设计",
+            type: "bar",
+            stack: "总量",
+            label: {
+              normal: {
+                show: true,
+                position: "inside"
+              }
+            },
+            lineStyle: {
+              normal: {
+                color: "#9400D3"
+              }
+            },
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: 7
+              }
+            },
+            data: [7 ,4, 7, 5, 14, 15]
+          },
+          {
+            name: "土建",
+            type: "bar",
+            stack: "总量",
+            label: {
+              normal: {
+                show: true,
+                position: "inside"
+              }
+            },
+            lineStyle: {
+              normal: {
+                color: "#F0FFFF"
+              }
+            },
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: 7
+              }
+            },
+            data: [13,16, 13, 15, 6 ,13]
+          },
+          {
+            name: "设备购置",
+            type: "bar",
+            stack: "总量",
+            label: {
+              normal: {
+                show: true,
+                position: "inside"
+              }
+            },
+            lineStyle: {
+              normal: {
+                color: "#40E0D0"
+              }
+            },
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: 7
+              }
+            },
+            data: [8 ,10 ,10 ,16 ,4 ,10]
+          },
+         
+          {
+            name: "仪器架设",
+            type: "bar",
+            stack: "总量",
+            label: {
+              normal: {
+                show: true,
+                position: "inside"
+              }
+            },
+            lineStyle: {
+              normal: {
+                color: "#FFFACD"
+              }
+            },
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: 7
+              }
+            },
+            data: [12, 10, 10, 4 ,16, 5]
+          },
+          {
+            name: "试运行",
+            type: "bar",
+            stack: "总量",
+            label: {
+              normal: {
+                show: true,
+                position: "inside"
+              }
+            },
+            lineStyle: {
+              normal: {
+                color: "#D2691E"
+              }
+            },
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: 7
+              }
+            },
+            data: [16 ,12 ,9 ,11 ,15 ,5]
+          },
+          {
+            name: "验收",
+            type: "bar",
+            stack: "总量",
+            label: {
+              normal: {
+                show: true,
+                position: "inside"
+              }
+            },
+            lineStyle: {
+              normal: {
+                color: "#B22222"
+              }
+            },
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: 7
+              }
+            },
+            data: [4 ,8, 11, 9, 5, 4]
           }
+          
         ]
       };
       this.chart1.setOption(option);
@@ -400,14 +578,16 @@ export default {
 
             roseType: "area",
             data: [
-              { value: 300, name: "验收" },
-              { value: 400, name: "试运行" },
-              { value: 405, name: "仪器假设" },
-              { value:350, name: "设备购置" },
-              { value: 400, name: "征地" },
-              { value: 315, name: "土建" },
-              { value: 300, name: "改造" },
-              { value: 400, name: "堪选" }
+              { value: 305, name: "验收(万元)" },
+              { value: 220, name: "试运行(万元)" },
+              { value: 500, name: "仪器架设(万元)" },
+              { value: 100, name: "设备购置(万元)" },
+              { value: 205, name: "土建(万元)" },
+              { value: 50, name: "工程设计(万元)" },
+              { value: 100, name: "节能影响评估(万元)" },
+              { value: 315, name: "前期工作咨询(万元)" },
+              { value: 300, name: "征（租）地(万元)" },
+              { value: 200, name: "勘选(万元)" }
             ]
           }
         ]
@@ -438,17 +618,17 @@ export default {
       border-radius: 10px;
       background: #1f2640;
       z-index: 200;
-      color: #939aab;
+     
       font-size: 13px;
       padding: 0 15px;
     }
     .title {
       font-size: 12px;
-      color: #939aab;
+      
       div {
+         margin-top: 10px;
         display: inline-block;
-        width: 19.5%;
-
+        width: 15.5%!important;
         text-align: center;
         span {
           display: block;

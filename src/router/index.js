@@ -33,6 +33,11 @@ export const constantRouterMap = [{
     hidden: true
   },
 
+  // {
+  //     path: '/homepage',
+  //     component:()=>import('@/views/homePage')
+  // },
+
   {
     path: '/',
     component: Layout,
@@ -59,12 +64,14 @@ export const constantRouterMap = [{
         path: 'units',
         component: () => import('@/views/dataManger/participatingunits/index')
       },
+     
       // 参与人员
 
       {
         path: 'participants',
         component: () => import('@/views/dataManger/participant/index')
       },
+      
       //项目建设
       {
         path: 'construction',
@@ -88,16 +95,29 @@ export const constantRouterMap = [{
         path: 'contract',
         component: () => import('@/views/dataManger/contract/index')
       },
+      {
+        path: 'contract1',
+        component: () => import('@/views/dataManger/contract/index1')
+      },
       //知识库管理
 
       {
         path: 'knowledge',
         component: () => import('@/views/dataManger/knowledgebase/index')
       },
+      {
+        path: 'knowledge1',
+        component: () => import('@/views/dataManger/knowledgebase/index1')
+      },
       //业务管理
       {
         path: 'business',
         component: () => import('@/views/businessmanager/business/index')
+      },
+      //状态修改
+      {
+        path: 'statused',
+        component: () => import('@/views/businessmanager/statused/index')
       },
       // 财务统计 
       {

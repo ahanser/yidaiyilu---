@@ -22,6 +22,7 @@
           type="text"
           auto-complete="off"
           placeholder="请输入用户名..."
+          @blur.prevent="changeCount()"
         />
       </el-form-item>
       <el-form-item>
@@ -46,6 +47,7 @@
         type="primary"
         style="width:100%; background:#ffae00;border:none;margin-bottom:30px;"
         @click.native.prevent="handleLogin"
+        @keyup.enter="handleLogin"
       >登录</el-button>
     </el-form>
   </div>
@@ -72,6 +74,7 @@ export default {
       }
     };
     return {
+      
       note: {
         backgroundImage: "url(" + require("../../assets/images/bg.png") + ")",
         backgroundRepeat: "no-repeat",
@@ -101,7 +104,21 @@ export default {
       immediate: true
     }
   },
+    //为enter绑定的登陆事件
+    created:function(){
+			// 主页添加键盘事件,注意,不能直接在焦点事件上添加回车
+			var that=this;
+			document.onkeydown=function(e){
+				var key=window.event.keyCode;
+				if(key==13){
+					that.handleLogin();
+				}
+			}
+  },
+
+
   methods: {
+    
     showPwd() {
       if (this.pwdType === "password") {
         this.pwdType = "";
@@ -109,12 +126,41 @@ export default {
         this.pwdType = "password";
       }
     },
+    changeCount(){
+        if(this.loginForm.username==''){
+          this.$message({
+          message: '用户名不能为空',
+          type: 'warning'
+        });
+        return
+      }
+    },
     handleLogin() {
+      
       window.sessionStorage.setItem(
         "userInfor",
         JSON.stringify(this.loginForm)
       );
-      this.$router.push({ path: this.redirect || "/" });
+        var data=['李欣','王安','常伟','刘瑞','admin']
+        if(this.loginForm.username==''){
+          this.$message({
+          message: '用户名不能为空',
+          type: 'warning'
+        });
+        return
+      }
+        if(data.includes(this.loginForm.username)){
+           this.$router.push({ path: this.redirect || "/" });
+        }else{
+          this.$message({
+          message: '输入的用户名有误 请重新输入',
+          type: 'warning'
+            });   
+        }
+  
+     
+      
+      
     }
   }
 };
@@ -191,7 +237,7 @@ $light_gray: #eee;
     position: absolute;
     left: 0;
     right: 0;
-    max-width: 450px;
+    max-width: 600px!important;
     width: 30%;
     max-width: 100%;
     padding: 35px 35px 15px 35px;
