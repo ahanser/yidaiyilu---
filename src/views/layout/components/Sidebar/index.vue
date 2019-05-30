@@ -13,7 +13,7 @@
       :default-openeds="openeds"
     >
       
-      <nav-bar-item v-for="(item, n) in navList " :item="item" :navIndex="String(n)" :key="n"></nav-bar-item>
+      <nav-bar-item v-for="(item, n) in navList " :item="item" :navIndex="String(n)" :key="n" @click.native="showBtn(n)" ></nav-bar-item>
         
     </el-menu>
   </div>
@@ -39,28 +39,9 @@ export default {
       activeIndex:0
     }
   },
-  watch:{
-    navList(){
-        // this.$store.state.user.sibarArr = this.nav[0].child
-        // this.$store.state.user.defaultPath = this.$router.path
-        //  console.log("TCL: navList -> this.navList[0].child[0].path", this.navList[0].child[0].path)
-    },
-     
-   
-  },
+  watch:{},
   props: ['layout'],
   computed: {
-    // defActive() {
-    //   // if (this.active == "") {
-    //   //   this.active = this.navList[0].path;
-    //   //   alert(this.active);
-    //   //   return this.active;
-    //   // } else {
-        
-    //   return this.$router.path
-			
-    //   }
-    // },
  defaultActive() {
             return this.$route.path 
             // return '/' + this.$route.path.split('/').reverse()[0];
@@ -74,6 +55,7 @@ export default {
   },
   mounted() {
       let user = JSON.parse(window.sessionStorage.getItem('userInfor')).username
+      
       if (user == '李欣') {
         this.$store.state.user.menuArr = obj
         //this.$router.push(this.navList[0].child[0].path)
@@ -153,6 +135,11 @@ export default {
   //     }
   //   }
   // },
+  methods:{
+    showBtn(index){
+      console.log('我是'+index+'我被点击了');
+    }
+  },
   components: {
     NavBarItem: NavBarItem
   }
@@ -172,5 +159,6 @@ export default {
 .el-submenu .el-menu-item {
   font-size: 16px;
 }
+
 </style>
 

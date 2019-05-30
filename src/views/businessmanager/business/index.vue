@@ -48,9 +48,10 @@
             
          <el-table :data="tableData2" border style="width: 100%;margin-top:0px" :header-cell-style="{background:'#BFEFFF',color:'#000000'}"
          :cell-style="{background:'white',color:'#000000'}"
-        @cell-mouse-enter="handleMouseEnter"
+    
         class="tableHover"
          >
+          <!-- /    @cell-mouse-enter="handleMouseEnter" -->
                     <el-table-column prop="date" label="序号" width="80" align="center">
                          
                     </el-table-column>
@@ -73,7 +74,7 @@
          
         </el-row>
       </div>
-     
+    
   </el-dialog>
       <!-- 补充说明 -->
      <el-dialog title="补充说明" :visible.sync="isExplan" width="40%">
@@ -265,17 +266,17 @@ export default {
     
 
   //去除hover效果
-  setTimeout(function () {
+  // setTimeout(function () {
 
-    const obj = document.getElementsByClassName("el-table--enable-row-hover")[0];
+  //   const obj = document.getElementsByClassName("el-table--enable-row-hover")[0];
 
-    let clz = obj.getAttribute("class");
+  //   let clz = obj.getAttribute("class");
 
-    clz = clz.replace("el-table--enable-row-hover","");
+  //   clz = clz.replace("el-table--enable-row-hover","");
 
-    obj.setAttribute("class",clz);
+  //   obj.setAttribute("class",clz);
 
-  },1)
+  // },1)
 
   },
   data() {
@@ -851,7 +852,7 @@ export default {
   }
 }
 </script>
-<style rel="stylesheet/scss" lang="scss" >
+<style rel="stylesheet/scss" lang="scss">
 
  
 
@@ -867,16 +868,7 @@ export default {
 //    bottom: 25px;
 //    left: 20px;
  }
-.Projectselection{
-//  .el-input--mini .el-input__inner {
-//     height: 28px;
-//     line-height: 28px;
-//     background: transparent;
-//     color: black!important;
-//     background: rgb(51, 50, 50);
-//     opacity: 0.8;
-//   }
-}
+
 .uploadButton
 {
   width: 500px;
@@ -954,7 +946,7 @@ export default {
  
 
   .el-form-item--mini .el-form-item__label {
-    line-height: 28px;
+    //line-height: 28px;
     color: #fff;
   }
   .el-table th,

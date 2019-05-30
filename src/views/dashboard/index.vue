@@ -24,7 +24,8 @@
             </template>
           </el-table-column>
         </el-table>-->
-        <tree-table :data="data" :eval-args="args" :expand-all="expandAll" border>
+        <tree-table :data="data" border>
+          <!-- :eval-args="args" :expand-all="expandAll"  -->
           <el-table-column label="编号" prop="date" width="150" align="center">
       <template slot-scope="scope">
         <el-tag

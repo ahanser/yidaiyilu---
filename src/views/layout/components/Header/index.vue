@@ -57,13 +57,9 @@ export default {
   
   watch:{
     nav(){
-        
-   
-           
+      
         //this.$router.push(this.nav[0].path)
         this.$store.state.user.sibarArr = this.nav[0].child
-      
-   
     }
   },
   computed: {

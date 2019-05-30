@@ -127,7 +127,27 @@ export const constantRouterMap = [{
       {
         path: 'progress',
         component: () => import('@/views/businessmanager/progress/index')
-      }
+      },// 项目任务
+      {
+        path: 'projectinfo',
+        component: () => import('@/views/dataManger/projectinfo/index')
+      },// 项目总览
+      {
+        path: 'projectoverview',
+        component: () => import('@/views/dataManger/projectoverview/index')
+      },// 总览查看
+      {
+        path: 'overview',
+        component: () => import('@/views/dataManger/projectoverview/overviewinfo')
+      },//项目文档
+      {
+        path: 'projectdoc',
+        component: () => import('@/views/dataManger/projectdoc/index')
+      },//资金管理
+      {
+        path: 'capital',
+        component: () => import('@/views/dataManger/capital/index')
+      },//
     ]
   },
 

@@ -3,31 +3,80 @@ let obj1= [
     path: "/dashboard",
     parentId:null,
     name: "项目管理",
-    id:1,
+    isExpend: false,
+    id:0,
     icon: "el-icon-date",
     child: [{
-        parentId:1,
-        id:2,
+        parentId:0,
+        isExpend: false,
+        id:1,
         path: "/dashboard",
         icon: "el-icon-date",
-        name: "项目管理",
+        name: "建设管理",
         child: [{
-            parentId:2,
-            id:3,
+            parentId:1,
+            isExpend: false,
+            id:2,
             path: "/dashboard",
             name: "建设任务"
           },
           {
-            parentId:2,
-            id:4,
+            parentId:1,
+            isExpend: false,
+            id:3,
             path: "/process",
             name: "建设过程"
           },
+       
+          
+        ]
+      },{
+        parentId:0,
+        isExpend: false,
+        id:1,
+        path: "/dashboard",
+        icon: "el-icon-message",
+        name: "项目管理",
+        child:[
           {
-            parentId:2,
+            parentId:1,
+            isExpend: false,
+            id:4,
+            path: "/manger",
+            name: "建设项目",
+          },
+          {
+            parentId:1,
+            isExpend: false,
             id:5,
-            path: "/construction",
-            name: "建设项目"
+            path: "/projectinfo",
+            name: "项目任务",
+          },{
+            parentId:1,
+            isExpend: false,
+            id:6,
+            path: "/projectoverview",
+            name: "项目总览",
+          },
+          {
+            parentId:1,
+            isExpend: false,
+            id:6,
+            path: "/projectdoc",
+            name: "项目文档",
+          }
+        ]
+      },{
+        parentId:0,
+        isExpend: false,
+        id:1,
+        path: "/dashboard",
+        icon: "el-icon-sold-out",
+        name: "资金管理",
+        child:[
+          {
+            path: "/capital",
+            name: "资金管理"
           },
         ]
       }
@@ -72,6 +121,9 @@ let obj1= [
             {
               path: "/progress",
               name: "分项目进度统计"
+            }, {
+              path: "/capital",
+              name: "资金管理"
             },
           ]
         }

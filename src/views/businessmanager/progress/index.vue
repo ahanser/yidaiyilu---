@@ -1,7 +1,7 @@
 <template>
   <div id="container1">
     <div class="content">
-      {{width}}
+      <!-- {{width}} -->
       <el-row>
 
          <div class="header">
@@ -245,7 +245,21 @@ export default {
       let option = {
         tooltip: {
           trigger: "axis",
-          // formatter: "{a} <br/>{b} : {c}%",
+          //formatter: "{a} <br/>{b} : {c}%",
+        //   formatter: function (params,ticket,callback) {
+          
+        //       var res = params[0].name;
+        //       console.log("TCL:  params[0].name;",  params[0])
+        //     // if(params[0].dataIndex==0){
+        //     //     //var res = params[0].name;
+        //     //     for (var i = 0, l = params.length; i < l; i++) {
+        //     //     res += '<br/>' + params[i].seriesName + ' : ' + params[i].value+'%'+'<br/>'+'预算花费:'+costData[0]+'万元'+'<br/>'+'实际花费:'+prveData[0]+'万元'
+        //     //     }          
+        //     // }
+           
+        //          return res;
+           
+        // },
           axisPointer: {
           //坐标轴指示器，坐标轴触发有效
           type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
@@ -301,7 +315,8 @@ export default {
             label: {
               normal: {
                 show: true,
-                position: "inside"
+                position: "inside",
+                  formatter:'{c}%'     
               }
             },
             lineStyle: {
@@ -314,6 +329,7 @@ export default {
                 barBorderRadius: 7
               }
             },
+          
             data: [5, 10, 12, 9, 8,13]
           },
            {
@@ -323,7 +339,8 @@ export default {
             label: {
               normal: {
                 show: true,
-                position: "inside"
+                position: "inside",
+                formatter:'{c}%'         
               }
             },
             lineStyle: {
@@ -345,7 +362,8 @@ export default {
             label: {
               normal: {
                 show: true,
-                position: "inside"
+                position: "inside",
+                  formatter:'{c}%'     
               }
             },
             lineStyle: {
@@ -367,7 +385,8 @@ export default {
             label: {
               normal: {
                 show: true,
-                position: "inside"
+                position: "inside",
+                  formatter:'{c}%'     
               }
             },
             lineStyle: {
@@ -389,7 +408,8 @@ export default {
             label: {
               normal: {
                 show: true,
-                position: "inside"
+                position: "inside",
+                  formatter:'{c}%'     
               }
             },
             lineStyle: {
@@ -411,7 +431,8 @@ export default {
             label: {
               normal: {
                 show: true,
-                position: "inside"
+                position: "inside",
+                  formatter:'{c}%'     
               }
             },
             lineStyle: {
@@ -433,7 +454,8 @@ export default {
             label: {
               normal: {
                 show: true,
-                position: "inside"
+                position: "inside",
+                  formatter:'{c}%'     
               }
             },
             lineStyle: {
@@ -456,7 +478,8 @@ export default {
             label: {
               normal: {
                 show: true,
-                position: "inside"
+                position: "inside",
+                  formatter:'{c}%'     
               }
             },
             lineStyle: {
@@ -478,7 +501,8 @@ export default {
             label: {
               normal: {
                 show: true,
-                position: "inside"
+                position: "inside",
+                  formatter:'{c}%'     
               }
             },
             lineStyle: {
@@ -500,7 +524,8 @@ export default {
             label: {
               normal: {
                 show: true,
-                position: "inside"
+                position: "inside",
+                  formatter:'{c}%'     
               }
             },
             lineStyle: {
@@ -578,16 +603,16 @@ export default {
 
             roseType: "area",
             data: [
-              { value: 305, name: "验收(万元)" },
-              { value: 220, name: "试运行(万元)" },
-              { value: 500, name: "仪器架设(万元)" },
-              { value: 100, name: "设备购置(万元)" },
-              { value: 205, name: "土建(万元)" },
-              { value: 50, name: "工程设计(万元)" },
-              { value: 100, name: "节能影响评估(万元)" },
-              { value: 315, name: "前期工作咨询(万元)" },
-              { value: 300, name: "征（租）地(万元)" },
-              { value: 200, name: "勘选(万元)" }
+              { value: 305, name: "验收" },
+              { value: 220, name: "试运行" },
+              { value: 500, name: "仪器架设" },
+              { value: 100, name: "设备购置" },
+              { value: 205, name: "土建" },
+              { value: 50, name: "工程设计" },
+              { value: 100, name: "节能影响评估" },
+              { value: 315, name: "前期工作咨" },
+              { value: 300, name: "征（租）地" },
+              { value: 200, name: "勘选" }
             ]
           }
         ]

@@ -82,7 +82,7 @@
       <!-- 内部操作 -->
       <el-form ref="form" label-width="140px">
          <el-form-item label="用户名：">
-          <el-input value="18826258535" :disabled="true"></el-input>
+          <el-input value="18826258535" disabled></el-input>
         </el-form-item>
         <el-form-item label="真实姓名：">
           <el-input value="王安"></el-input>

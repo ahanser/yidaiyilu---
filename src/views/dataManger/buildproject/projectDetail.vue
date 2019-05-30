@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     backHome() {
-      this.$router.push({ path: "/manger" });
+      this.$router.push({ path: "/capital" });
     }
   }
 };

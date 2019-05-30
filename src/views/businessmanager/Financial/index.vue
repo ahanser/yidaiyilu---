@@ -1,7 +1,7 @@
 <template>
   <div id="container1">
     <div class="content">
-      {{width}}
+      <!-- {{width}} -->
       <el-row>
 
          <div class="header">
@@ -182,7 +182,6 @@ export default {
           {
             name: "",
             type: "gauge",
-    
             detail: { formatter: "{value}%" }, //仪表盘显示数据
             radius : '100%',
             axisLine: {
@@ -199,9 +198,6 @@ export default {
               {  name: "总额度",
                 value: 53,
               
-                textStyle:{
-                 color: "#fff"
-                  }
                 },
               
             ],
@@ -278,10 +274,10 @@ export default {
           
          formatter: function (params,ticket,callback) {
            //if(params.dataIndex)
-            console.log(params[0].dataIndex)
-                var res = params[0].name;
+            //console.log(params[0].dataIndex)
+              var res = params[0].name;
             if(params[0].dataIndex==0){
-                var res = params[0].name;
+                //var res = params[0].name;
                 for (var i = 0, l = params.length; i < l; i++) {
                 res += '<br/>' + params[i].seriesName + ' : ' + params[i].value+'%'+'<br/>'+'预算花费:'+costData[0]+'万元'+'<br/>'+'实际花费:'+prveData[0]+'万元'
                 }          

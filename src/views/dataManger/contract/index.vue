@@ -340,6 +340,13 @@ export default {
       ]
     };
   },
+   computed: {
+     users() {
+      let user = JSON.parse(window.sessionStorage.getItem('userInfor')).username
+      return user
+    },
+ 
+  },
   methods: {
     closeDialog(){
      this.$refs.editClose.blur()
